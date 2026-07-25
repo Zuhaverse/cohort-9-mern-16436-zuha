@@ -23,11 +23,10 @@ async function connectDatabase() {
     process.exit(1);
   }
 }
-
-connectDatabase();
-
-app.listen(port, () => {
-    const logger = require("./logger/logger");
-
-  logger.info(`Server running on port ${port}`);
-});
+async function startServer() {
+  await connectDatabase();
+  app.listen(port, () => {
+    logger.info(`Server running on port ${port}`);
+  });
+}
+startServer();
