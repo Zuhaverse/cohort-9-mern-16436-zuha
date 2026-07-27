@@ -49,6 +49,11 @@ async function registerUser(userData) {
       throw error;
     }
 
+    if (error.code === "ER_DUP_ENTRY") {
+      logger.warn("Registration failed: Email already exists");
+      throw new Error("Email already exists");
+    }
+
     logger.error(error, "Registration service failed");
 
     throw new Error("Registration failed");
