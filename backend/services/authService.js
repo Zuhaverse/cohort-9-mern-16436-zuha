@@ -4,33 +4,56 @@ const userModel = require("../models/userModel")
 const logger = require("../logger/logger")
 
 async function registerUser(userData) {
-    const {name, email, password} = userData;
-    
-  logger.info(`Registration attempt: ${email}`);
+  let { name, email, password } = userData;
 
-  const existingUser = await userModel.findUserByEmail(email);
-
-  if (existingUser) {
-    logger.warn(`Registration failed: ${email} already exists`);
-
-    throw new Error("Email already exists");
+  // Validation first
+  if (!name || !email || !password) {
+    throw new Error("All fields are required");
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  name = name.trim();
+  email = email.trim().toLowerCase();
 
-  await userModel.createUser(
-    name,
-    email,
-    hashedPassword
-  );
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  logger.info(`Registration successful: ${email}`);
+  if (!emailRegex.test(email)) {
+    throw new Error("Invalid email format");
+  }
 
-  return {
-    message: "User registered successfully",
-  };
+  if (password.length < 6) {
+    throw new Error("Password must be at least 6 characters");
+  }
+
+  try {
+    logger.info("Registration attempt");
+
+    const existingUser = await userModel.findUserByEmail(email);
+
+    if (existingUser) {
+      logger.warn("Registration failed: Email already exists");
+      throw new Error("Email already exists");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await userModel.createUser(name, email, hashedPassword);
+
+    logger.info("Registration successful");
+
+    return {
+      message: "User registered successfully",
+    };
+
+  } catch (error) {
+    if (error.message === "Email already exists") {
+      throw error;
+    }
+
+    logger.error(error, "Registration service failed");
+
+    throw new Error("Registration failed");
+  }
 }
-
 module.exports = {
   registerUser,
 };

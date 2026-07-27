@@ -1,36 +1,43 @@
 const db = require("../config/db");
 
 async function findUserByEmail(email) {
+    let connection;
+  
     try {
-      const connection = await db.getConnection();
+      connection = await db.getConnection();
   
       const [rows] = await connection.query(
         "SELECT * FROM users WHERE email = ?",
         [email]
       );
   
-      connection.release();
-  
       return rows[0];
     } catch (error) {
       throw error;
+    } finally {
+      if (connection) {
+        connection.release();
+      }
     }
   }
   async function createUser(name, email, hashedPassword) {
+    let connection;
+  
     try {
-      const connection = await db.getConnection();
+      connection = await db.getConnection();
   
       const [result] = await connection.query(
         "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
         [name, email, hashedPassword]
       );
   
-      connection.release();
-  
       return result;
     } catch (error) {
       throw error;
+    } finally {
+      if (connection) {
+        connection.release();
+      }
     }
   }
-
 module.exports = { findUserByEmail, createUser };

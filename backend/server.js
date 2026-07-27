@@ -31,8 +31,12 @@ async function connectDatabase() {
 
 async function startServer() {
   await connectDatabase();
-  app.listen(port, () => {
+  const server = app.listen(port, () => {
     logger.info(`Server running on port ${port}`);
+  });
+  server.on("error", (error) => {
+    logger.error(error, "Server failed to start");
+    process.exit(1);
   });
 }
 startServer();
