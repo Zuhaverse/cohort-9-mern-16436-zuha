@@ -1,9 +1,11 @@
+
+require("dotenv").config();
+
 const loggerMiddleware = require("./middleware/loggerMiddleware");
 const logger = require("./logger/logger.js");
 const db = require("./config/db");
 const authRoutes = require("./routes/authRoutes")
 
-require("dotenv").config();
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
@@ -30,13 +32,22 @@ async function connectDatabase() {
 
 
 async function startServer() {
-  await connectDatabase();
-  const server = app.listen(port, () => {
-    logger.info(`Server running on port ${port}`);
-  });
-  server.on("error", (error) => {
-    logger.error(error, "Server failed to start");
+  try {
+    await connectDatabase();
+
+    const server = app.listen(port, () => {
+      logger.info(`Server running on port ${port}`);
+    });
+
+    server.on("error", (error) => {
+      logger.error(error, "Server failed to start");
+      process.exit(1);
+    });
+
+  } catch (error) {
+    logger.error(error, "Application startup failed");
     process.exit(1);
-  });
+  }
 }
+
 startServer();

@@ -3,7 +3,7 @@ const logger = require("../logger/logger")
 
 async function registerUser(req, res) {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password } = req.body ?? {};
         const result = await authService.registerUser({name, email, password});
         res.status(201).json(result);
     } catch (error) {

@@ -5,6 +5,15 @@ const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middleware/authMiddleware");
 
 describe("Auth Middleware", function () {
+    const originalJwtSecret = process.env.JWT_SECRET;
+
+  before(function () {
+    process.env.JWT_SECRET = "test-jwt-secret";
+  });
+  after(function () {
+    if (originalJwtSecret === undefined) delete process.env.JWT_SECRET;
+    else process.env.JWT_SECRET = originalJwtSecret;
+  });
 
     it("should return 401 when no token is provided", function () {
   
