@@ -1,4 +1,6 @@
 const loggerMiddleware = require("./middleware/loggerMiddleware");
+const logger = require("./logger/logger.js");
+const db = require("./config/db");
 
 require("dotenv").config();
 const express = require('express');
@@ -11,8 +13,20 @@ app.get('/', (req, res) => {
     res.send('Backend is running');
 });
 
-app.listen(port, () => {
-    const logger = require("./logger/logger");
-
-  logger.info(`Server running on port ${port}`);
-});
+async function connectDatabase() {
+  try {
+    const connection = await db.getConnection();
+    logger.info("Database connected successfully");
+    connection.release();
+  } catch (error) {
+    logger.error(error, "Database connection failed");
+    process.exit(1);
+  }
+}
+async function startServer() {
+  await connectDatabase();
+  app.listen(port, () => {
+    logger.info(`Server running on port ${port}`);
+  });
+}
+startServer();
