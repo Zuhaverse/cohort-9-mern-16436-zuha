@@ -19,7 +19,12 @@ const jwt = require("jsonwebtoken");
           const token = authHeader.split(" ")[1];
         
           try {
+<<<<<<< HEAD
             
+=======
+            console.log("JWT Secret:", process.env.JWT_SECRET);
+    console.log("Token:", token);
+>>>>>>> 56ef3ba (feat: add JWT authentication with middleware and tests)
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
         
             req.user = decoded;
