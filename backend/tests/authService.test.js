@@ -36,4 +36,44 @@ describe("Auth Service", function () {
         }
       });
 
+      it("should login successfully with valid credentials", async function () {
+
+        const result = await authService.loginUser({
+          email: "zuha123@example.com",
+          password: "123456",
+        });
+      
+        expect(result).to.have.property("token");
+      });
+
+      it("should throw an error for invalid credentials", async function () {
+
+        try {
+          await authService.loginUser({
+            email: "zuha123@example.com",
+            password: "wrongpassword",
+          });
+      
+          throw new Error("Test failed");
+        } catch (error) {
+          expect(error.message).to.equal("Invalid credentials");
+        }
+      
+      });
+
+      it("should throw an error for invalid email format", async function () {
+
+        try {
+          await authService.loginUser({
+            email: "invalidemail",
+            password: "123456",
+          });
+      
+          throw new Error("Test failed");
+        } catch (error) {
+          expect(error.message).to.equal("Invalid email format");
+        }
+      
+      });
+
     });

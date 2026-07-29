@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 
 const userModel = require("../models/userModel")
 const logger = require("../logger/logger")
@@ -59,6 +60,72 @@ async function registerUser(userData) {
     throw new Error("Registration failed");
   }
 }
+
+async function loginUser(userData) {
+  try {
+    let { email, password } = userData;
+
+    if (!email || !password) {
+      throw new Error("All fields are required");
+    }
+
+    email = email.trim().toLowerCase();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      throw new Error("Invalid email format");
+    }
+
+    logger.info("Login attempt");
+
+    const user = await userModel.findUserByEmail(email);
+
+    if (!user) {
+      logger.warn("Invalid credentials");
+      throw new Error("Invalid credentials");
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      logger.warn("Invalid credentials");
+      throw new Error("Invalid credentials");
+    }
+
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    logger.info("Login successful");
+
+    return {
+      token,
+    };
+
+  } catch (error) {
+
+    if (
+      error.message === "Invalid credentials" ||
+      error.message === "All fields are required" ||
+      error.message === "Invalid email format"
+    ) {
+      throw error;
+    }
+
+    logger.error(error, "Login service failed");
+    throw new Error("Login failed");
+  }
+}
+
 module.exports = {
   registerUser,
+  loginUser,
 };
