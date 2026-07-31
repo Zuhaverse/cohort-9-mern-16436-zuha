@@ -5,10 +5,16 @@ const expect = chai.expect;
 const authService = require("../services/authService");
 
 describe("Auth Service", function () {
-  process.env.JWT_SECRET = "test-jwt-secret";
-  before(function () {
-    process.env.JWT_SECRET = "test-jwt-secret";
-  });
+  const loginFixture = {
+    name: "Login Fixture",
+    email: `login-fixture${Date.now()}@example.com`,
+    password: "123456",
+  };
+    
+      before(async function () {
+        process.env.JWT_SECRET = "test-jwt-secret";
+        await authService.registerUser(loginFixture);
+      });
   after(function () {
     if (originalJwtSecret === undefined) delete process.env.JWT_SECRET;
     else process.env.JWT_SECRET = originalJwtSecret;
@@ -48,8 +54,8 @@ describe("Auth Service", function () {
       it("should login successfully with valid credentials", async function () {
 
         const result = await authService.loginUser({
-          email: "zuha123@example.com",
-          password: "123456",
+          email: loginFixture.email,
+    password: loginFixture.password,
         });
       
         expect(result).to.have.property("token");
@@ -59,7 +65,7 @@ describe("Auth Service", function () {
 
         try {
           await authService.loginUser({
-            email: "zuha123@example.com",
+            email: loginFixture.email,
             password: "wrongpassword",
           });
       

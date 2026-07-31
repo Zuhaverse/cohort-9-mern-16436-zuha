@@ -13,6 +13,10 @@ function validateRegister(req, res, next) {
         return validationError("All fields are required!", next);
     }    
 
+    if (typeof name !== "string" || typeof email !== "string" || typeof password !== "string") {
+        return validationError("Invalid field types", next);
+        }
+
     req.body.email = email.trim().toLowerCase();
 
     if(!emailRegex.test(req.body.email)){
@@ -31,6 +35,10 @@ function validateLogin(req, res, next){
     if(!email || !password){
         return validationError("All fields are required!", next);
     }   
+
+    if (typeof email !== "string" || typeof password !== "string") {
+        return validationError("Invalid field types", next);
+        }
 
     req.body.email = email.trim().toLowerCase();
 

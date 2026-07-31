@@ -3,9 +3,14 @@ const logger = require("../logger/logger");
 
 function errorMiddleware(err, req, res, next){
     logger.error(err);
-    return res.status(err.status || 500).json({
-        success: false,
-        message: err.message || "Internal Server Error"
+    const status = err.status || 500;
+
+    return res.status(status).json({
+      success: false,
+      message:
+        status >= 500
+          ? "Internal Server Error"
+          : err.message,
     });
 }
 
