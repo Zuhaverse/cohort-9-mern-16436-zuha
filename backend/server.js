@@ -3,9 +3,12 @@ require("dotenv").config();
 
 const loggerMiddleware = require("./middleware/loggerMiddleware");
 const errorMiddleware = require("./middleware/errorMiddleware.js")
+
 const logger = require("./logger/logger.js");
 const db = require("./config/db");
-const authRoutes = require("./routes/authRoutes")
+
+const authRoutes = require("./routes/authRoutes");
+const noteRoutes = require("./routes/noteRoutes.js");
 
 const express = require('express');
 const app = express();
@@ -13,7 +16,10 @@ const port = process.env.PORT || 5000;
 
 app.use(loggerMiddleware);
 app.use(express.json());
+
 app.use("/api/auth", authRoutes);
+app.use("/api/notes",noteRoutes);
+
 app.use(errorMiddleware);
 
 

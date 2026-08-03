@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const logger = require("../logger/logger");
 
     function authMiddleware(req, res, next) {
         const authHeader = req.headers.authorization;
@@ -11,6 +12,7 @@ const jwt = require("jsonwebtoken");
 
         
         if (!authHeader.startsWith("Bearer ")) {
+          logger.warn("Invalid token format");
             return res.status(401).json({
               message: "Invalid token format.",
             });
@@ -31,7 +33,10 @@ const jwt = require("jsonwebtoken");
         
             next();
           } catch (error) {
-            console.log(error);
+            logger.warn(
+              { error: error.message },
+              "Invalid or expired token"
+            );
         
             return res.status(401).json({
                 message: "Invalid or expired token.",
