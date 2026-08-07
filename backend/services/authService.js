@@ -59,7 +59,7 @@ async function loginUser(userData) {
       logger.warn({ email }, "Invalid credentials");
 
       const error = new Error("Invalid credentials");
-      error.status = 400;
+      error.status = 401;
       throw error;
     }
 
@@ -69,7 +69,7 @@ async function loginUser(userData) {
       logger.warn({ email }, "Invalid credentials");
 
       const error = new Error("Invalid credentials");
-      error.status = 400;
+      error.status = 401;
       throw error;
     }
 
