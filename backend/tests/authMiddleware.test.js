@@ -86,7 +86,41 @@ describe("Auth Middleware", function () {
         authMiddleware(req, res, next);
       
         expect(next.calledOnce).to.be.true;
+        expect(next.firstCall.args).to.have.lengthOf(0);
         expect(req.user.email).to.equal("zuha123@example.com");
+      
+      });
+
+      it("should return 401 for an expired token", function () {
+
+        const token = jwt.sign(
+          {
+            id: 1,
+            email: "zuha123@example.com"
+          },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: -1
+          }
+        );
+      
+        const req = {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        };
+      
+        const res = {
+          status: sinon.stub().returnsThis(),
+          json: sinon.stub()
+        };
+      
+        const next = sinon.spy();
+      
+        authMiddleware(req, res, next);
+      
+        expect(res.status.calledWith(401)).to.be.true;
+        expect(next.called).to.be.false;
       
       });
   

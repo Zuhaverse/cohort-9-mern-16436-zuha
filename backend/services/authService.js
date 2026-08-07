@@ -1,102 +1,81 @@
-const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-const userModel = require("../models/userModel")
-const logger = require("../logger/logger")
+const userModel = require("../models/userModel");
+const logger = require("../logger/logger");
 
 async function registerUser(userData) {
-  let { name, email, password } = userData;
-
-  // Validation first
-  if (!name || !email || !password) {
-    throw new Error("All fields are required");
-  }
-
-  name = name.trim();
-  email = email.trim().toLowerCase();
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!emailRegex.test(email)) {
-    throw new Error("Invalid email format");
-  }
-
-  if (password.length < 6) {
-    throw new Error("Password must be at least 6 characters");
-  }
+  const { name, email, password } = userData;
 
   try {
-    logger.info("Registration attempt");
+    logger.info({ email }, "Registration attempt");
 
     const existingUser = await userModel.findUserByEmail(email);
 
     if (existingUser) {
-      logger.warn("Registration failed: Email already exists");
-      throw new Error("Email already exists");
+      logger.warn({ email }, "Registration failed: Email already exists");
+
+      const error = new Error("Email already exists");
+      error.status = 400;
+      throw error;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await userModel.createUser(name, email, hashedPassword);
 
-    logger.info("Registration successful");
+    logger.info({ email }, "Registration successful");
 
     return {
       message: "User registered successfully",
     };
-
   } catch (error) {
-    if (error.message === "Email already exists") {
+    if (error.status) {
       throw error;
     }
 
     if (error.code === "ER_DUP_ENTRY") {
-      logger.warn("Registration failed: Email already exists");
-      throw new Error("Email already exists");
+      logger.warn({ email }, "Registration failed: Email already exists");
+
+      const duplicateError = new Error("Email already exists");
+      duplicateError.status = 400;
+      throw duplicateError;
     }
 
     logger.error(error, "Registration service failed");
-
-    throw new Error("Registration failed");
+    throw error;
   }
 }
 
 async function loginUser(userData) {
+  const { email, password } = userData;
+
   try {
-    let { email, password } = userData;
-
-    if (!email || !password) {
-      throw new Error("All fields are required");
-    }
-
-    email = email.trim().toLowerCase();
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(email)) {
-      throw new Error("Invalid email format");
-    }
-
-    logger.info("Login attempt");
+    logger.info({ email }, "Login attempt");
 
     const user = await userModel.findUserByEmail(email);
 
     if (!user) {
-      logger.warn("Invalid credentials");
-      throw new Error("Invalid credentials");
+      logger.warn({ email }, "Invalid credentials");
+
+      const error = new Error("Invalid credentials");
+      error.status = 400;
+      throw error;
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      logger.warn("Invalid credentials");
-      throw new Error("Invalid credentials");
+      logger.warn({ email }, "Invalid credentials");
+
+      const error = new Error("Invalid credentials");
+      error.status = 400;
+      throw error;
     }
 
     const token = jwt.sign(
       {
         id: user.id,
-     
       },
       process.env.JWT_SECRET,
       {
@@ -104,24 +83,16 @@ async function loginUser(userData) {
       }
     );
 
-    logger.info("Login successful");
+    logger.info({ email }, "Login successful");
 
-    return {
-      token,
-    };
-
+    return { token };
   } catch (error) {
-
-    if (
-      error.message === "Invalid credentials" ||
-      error.message === "All fields are required" ||
-      error.message === "Invalid email format"
-    ) {
+    if (error.status) {
       throw error;
     }
 
     logger.error(error, "Login service failed");
-    throw new Error("Login failed");
+    throw error;
   }
 }
 
