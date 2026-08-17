@@ -1,9 +1,33 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../services/authService";
 
 import "./Signup.css";
 
 function Signup() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await registerUser({
+        name,
+        email,
+        password,
+      });
+  
+      console.log(response);
+  
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="signup-page">
@@ -18,15 +42,17 @@ function Signup() {
         <h1>Signup</h1>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
 
         <div className="form-group">
             <label htmlFor="name">Name</label>
             <input
-              type="name"
+              type="text"
               id="name"
               name="name"
               placeholder="Enter your name"
+              value={name}
+  onChange={(e) => setName(e.target.value)}
             />
           </div>
 
@@ -37,6 +63,8 @@ function Signup() {
               id="email"
               name="email"
               placeholder="Enter your email"
+              value={email}
+  onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -47,6 +75,8 @@ function Signup() {
               id="password"
               name="password"
               placeholder="Enter your password"
+              value={password}
+  onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 

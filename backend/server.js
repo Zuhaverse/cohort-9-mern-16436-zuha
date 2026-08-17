@@ -1,6 +1,6 @@
-
 require("dotenv").config();
 
+const cors = require("cors");
 const loggerMiddleware = require("./middleware/loggerMiddleware");
 const errorMiddleware = require("./middleware/errorMiddleware.js")
 
@@ -16,6 +16,12 @@ const port = process.env.PORT || 5000;
 
 app.use(loggerMiddleware);
 app.use(express.json());
+
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/notes",noteRoutes);
