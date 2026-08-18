@@ -1,13 +1,20 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
+import { verifySession } from "../services/authService";
+
+jest.mock("../services/authService", () => ({
+  verifySession: jest.fn(),
+}));
 
 describe("ProtectedRoute", () => {
   beforeEach(() => {
-    localStorage.clear();
+    jest.clearAllMocks();
   });
 
-  test("redirects unauthenticated users to login", () => {
+  test("redirects unauthenticated users to login", async () => {
+    verifySession.mockRejectedValue(new Error("Unauthorized"));
+
     render(
       <MemoryRouter initialEntries={["/dashboard"]}>
         <Routes>
@@ -25,16 +32,20 @@ describe("ProtectedRoute", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole("heading", { name: /login page/i }))
-      .toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: /login page/i })
+    ).toBeInTheDocument();
 
     expect(
       screen.queryByRole("heading", { name: /dashboard/i })
     ).not.toBeInTheDocument();
   });
 
-  test("renders protected content when token exists", () => {
-    localStorage.setItem("token", "fake-jwt-token");
+  test("renders protected content when session is authenticated", async () => {
+    verifySession.mockResolvedValue({
+      success: true,
+      authenticated: true,
+    });
 
     render(
       <MemoryRouter initialEntries={["/dashboard"]}>
@@ -54,7 +65,7 @@ describe("ProtectedRoute", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: /dashboard/i })
+      await screen.findByRole("heading", { name: /dashboard/i })
     ).toBeInTheDocument();
   });
 });
