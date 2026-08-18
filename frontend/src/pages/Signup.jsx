@@ -10,41 +10,44 @@ function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      const response = await registerUser({
+      await registerUser({
         name,
         email,
         password,
       });
-  
-      console.log(response);
-  
+
       navigate("/login");
     } catch (error) {
-      console.error(error);
+      setError("Registration failed. Please try again.");
     }
   };
 
   return (
     <div className="signup-page">
       <h1 id="welcome">a space for your thoughts.</h1>
-      <div className="signup-card">
-      <div className="signup-header">
 
-      <button type="button" className="button" id="back-btn" onClick={() => navigate(-1)}>
-      ←
-    </button>
-      
-        <h1>Signup</h1>
+      <div className="signup-card">
+        <div className="signup-header">
+          <button
+            type="button"
+            className="button"
+            id="back-btn"
+            onClick={() => navigate(-1)}
+          >
+            ←
+          </button>
+
+          <h1>Signup</h1>
         </div>
 
         <form onSubmit={handleSubmit}>
-
-        <div className="form-group">
+          <div className="form-group">
             <label htmlFor="name">Name</label>
             <input
               type="text"
@@ -52,7 +55,7 @@ function Signup() {
               name="name"
               placeholder="Enter your name"
               value={name}
-  onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
 
@@ -64,7 +67,7 @@ function Signup() {
               name="email"
               placeholder="Enter your email"
               value={email}
-  onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -76,15 +79,16 @@ function Signup() {
               name="password"
               placeholder="Enter your password"
               value={password}
-  onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+
+          {error && <p>{error}</p>}
 
           <button type="submit" className="button">
             Signup
           </button>
         </form>
-
       </div>
     </div>
   );

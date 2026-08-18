@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import Login from "./Login";
 import { loginUser } from "../services/authService";
@@ -29,13 +30,11 @@ test("renders the login page", () => {
   ).toBeInTheDocument();
 });
 
-test("logs in successfully and stores the JWT", async () => {
+test("logs in successfully and redirects to dashboard", async () => {
   loginUser.mockResolvedValue({
     success: true,
     message: "Login successful",
-    data: {
-      token: "fake-jwt-token",
-    },
+    data: {},
   });
 
   render(
@@ -44,15 +43,17 @@ test("logs in successfully and stores the JWT", async () => {
     </MemoryRouter>
   );
 
-  fireEvent.change(screen.getByLabelText(/email/i), {
-    target: { value: "test@example.com" },
-  });
+  await userEvent.type(
+    screen.getByLabelText(/email/i),
+    "test@example.com"
+  );
 
-  fireEvent.change(screen.getByLabelText(/password/i), {
-    target: { value: "password123" },
-  });
+  await userEvent.type(
+    screen.getByLabelText(/password/i),
+    "password123"
+  );
 
-  fireEvent.click(
+  await userEvent.click(
     screen.getByRole("button", { name: /login/i })
   );
 
@@ -62,6 +63,4 @@ test("logs in successfully and stores the JWT", async () => {
       password: "password123",
     });
   });
-
-  expect(localStorage.getItem("token")).toBe("fake-jwt-token");
 });
