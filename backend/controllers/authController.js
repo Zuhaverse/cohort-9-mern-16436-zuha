@@ -34,7 +34,18 @@ async function loginUser(req, res, next) {
   }
 }
 
+async function getCurrentUser(req, res) {
+  return res.status(200).json({
+    success: true,
+    authenticated: true,
+    data: {
+      user: req.user,
+    },
+  });
+}
+
 module.exports = {
   registerUser,
   loginUser,
+  getCurrentUser,
 };
