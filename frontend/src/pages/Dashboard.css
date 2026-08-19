@@ -1,0 +1,133 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Schoolbell&display=swap");
+
+body {
+  margin: 0;
+  background-color: #ffffff;
+  font-family: "Inter", sans-serif;
+  color: #222;
+}
+
+.dashboard {
+  min-height: 100vh;
+}
+
+.dashboard-nav {
+  height: 60px;
+  padding: 20px 30px 5px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-family: "Schoolbell", cursive;
+  font-size: 20px;
+  font-weight: 400;
+  color: #222;
+}
+
+.create-note-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 11px 18px;
+  background-color: #222;
+  color: white;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.create-note-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 48px;
+}
+
+.dashboard-heading {
+  margin-bottom: 32px;
+}
+
+.dashboard-heading h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+}
+
+.dashboard-heading p {
+  margin: 0;
+  color: #777;
+  font-size: 15px;
+}
+
+.empty-state {
+  padding: 70px 20px;
+  text-align: center;
+  background-color: white;
+  border: 1px dashed #d8d4cc;
+  border-radius: 14px;
+}
+
+.empty-state h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.empty-state p {
+  margin: 0 0 24px;
+  color: #777;
+}
+
+.dashboard-message {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.dashboard-message.error {
+  color: #c0392b;
+}
+
+@media (max-width: 700px) {
+  .dashboard-nav {
+    padding: 0 20px;
+  }
+
+  .brand-name {
+    font-size: 26px;
+  }
+
+  .dashboard-content {
+    padding: 35px 20px;
+  }
+
+  .dashboard-heading h1 {
+    font-size: 28px;
+  }
+
+  .create-note-btn {
+    padding: 10px 14px;
+  }
+}
