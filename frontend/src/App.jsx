@@ -20,6 +20,15 @@ function App() {
     </ProtectedRoute>
   }
 />
+
+<Route
+  path="/notes/new"
+  element={
+    <ProtectedRoute>
+      <Placeholder />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </BrowserRouter>
   );

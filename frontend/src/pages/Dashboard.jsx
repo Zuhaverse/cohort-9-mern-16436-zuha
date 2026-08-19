@@ -9,8 +9,8 @@ import "./Dashboard.css";
 function Dashboard() {
   const navigate = useNavigate();
 
-  const [notes, setNotes] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
