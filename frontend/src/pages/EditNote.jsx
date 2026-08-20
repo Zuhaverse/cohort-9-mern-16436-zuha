@@ -16,19 +16,37 @@ function EditNote() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    let isActive = true;
+  
     const fetchNote = async () => {
+      setLoading(true);
+      setNote(null);
+      setError("");
+  
       try {
         const response = await getNote(id);
-        setNote(response.data);
+  
+        if (isActive) {
+          setNote(response.data);
+        }
       } catch (error) {
         console.error("Fetch note error:", error);
-        setError("Failed to load note.");
+  
+        if (isActive) {
+          setError("Failed to load note.");
+        }
       } finally {
-        setLoading(false);
+        if (isActive) {
+          setLoading(false);
+        }
       }
     };
-
+  
     fetchNote();
+  
+    return () => {
+      isActive = false;
+    };
   }, [id]);
 
   const handleUpdate = async (noteData) => {
@@ -54,40 +72,42 @@ function EditNote() {
   if (loading) {
     return <p>Loading note...</p>;
   }
-
-  if (error && !note) {
-    return <p>{error}</p>;
-  }
-
+  
   return (
     <div className="note-page">
       <div className="header">
-          <button
-            type="button"
-            className="back-btn"
-            onClick={() => navigate("/dashboard")}
-            aria-label="Back to notes"
-          >
-            <ArrowLeft size={20} />
-          </button>
-          <div className="title-row">
-      <h1>Edit Note</h1>
-      
-      <p>Update your note.</p>
+        <button
+          type="button"
+          className="back-btn"
+          onClick={() => navigate("/dashboard")}
+          aria-label="Back to notes"
+        >
+          <ArrowLeft size={20} />
+        </button>
+  
+        <div className="title-row">
+          <h1>Edit Note</h1>
+          <p>Update your note.</p>
+        </div>
       </div>
-      </div>
-
-      {error && <p className="form-error">{error}</p>}
-
-      <NoteForm
-        initialData={{
-          title: note.title,
-          content: note.content,
-        }}
-        onSubmit={handleUpdate}
-        submitText="Save Changes"
-        loading={saving}
-      />
+  
+      {error && !note ? (
+        <p className="form-error">{error}</p>
+      ) : (
+        <>
+          {error && <p className="form-error">{error}</p>}
+  
+          <NoteForm
+            initialData={{
+              title: note.title,
+              content: note.content,
+            }}
+            onSubmit={handleUpdate}
+            submitText="Save Changes"
+            loading={saving}
+          />
+        </>
+      )}
     </div>
   );
 }

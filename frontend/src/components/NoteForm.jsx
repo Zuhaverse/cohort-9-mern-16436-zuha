@@ -30,10 +30,18 @@ function NoteForm({
       return;
     }
 
-    await onSubmit({
-      title: title.trim(),
-      content: content.trim(),
-    });
+    try {
+      await onSubmit({
+        title: title.trim(),
+        content: content.trim(),
+      });
+    } catch (error) {
+      console.error("Form submission error:", error);
+  
+      setErrors({
+        form: "Something went wrong. Please try again.",
+      });
+    }
   };
 
   return (
@@ -42,32 +50,42 @@ function NoteForm({
         <label htmlFor="title">Title</label>
 
         <input
-          id="title"
-          type="text"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-          placeholder="Enter note title"
-        />
+  id="title"
+  type="text"
+  value={title}
+  onChange={(event) => setTitle(event.target.value)}
+  placeholder="Enter note title"
+  aria-invalid={!!errors.title}
+  aria-describedby={errors.title ? "title-error" : undefined}
+  className={errors.title ? "input-error" : ""}
+/>
 
-        {errors.title && (
-          <p className="field-error">{errors.title}</p>
-        )}
+{errors.title && (
+  <p id="title-error" className="field-error">
+    {errors.title}
+  </p>
+)}
       </div>
 
       <div className="form-group">
         <label htmlFor="content">Content</label>
 
         <textarea
-          id="content"
-          value={content}
-          onChange={(event) => setContent(event.target.value)}
-          placeholder="Write your note..."
-          rows="10"
-        />
+  id="content"
+  value={content}
+  onChange={(event) => setContent(event.target.value)}
+  placeholder="Write your note..."
+  rows="10"
+  aria-invalid={!!errors.content}
+  aria-describedby={errors.content ? "content-error" : undefined}
+  className={errors.content ? "input-error" : ""}
+/>
 
-        {errors.content && (
-          <p className="field-error">{errors.content}</p>
-        )}
+{errors.content && (
+  <p id="content-error" className="field-error">
+    {errors.content}
+  </p>
+)}
       </div>
 
       <button type="submit" disabled={loading}>
