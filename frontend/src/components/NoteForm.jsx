@@ -46,27 +46,32 @@ function NoteForm({
 
   return (
     <form className="note-form" onSubmit={handleSubmit}>
-      <div className="form-group">
-        <label htmlFor="title">Title</label>
-
-        <input
-  id="title"
-  type="text"
-  value={title}
-  onChange={(event) => setTitle(event.target.value)}
-  placeholder="Enter note title"
-  aria-invalid={!!errors.title}
-  aria-describedby={errors.title ? "title-error" : undefined}
-  className={errors.title ? "input-error" : ""}
-/>
-
-{errors.title && (
-  <p id="title-error" className="field-error">
-    {errors.title}
-  </p>
-)}
-      </div>
-
+    {errors.form && (
+      <p className="form-error" role="alert">
+        {errors.form}
+      </p>
+    )}
+  
+    <div className="form-group">
+      <label htmlFor="title">Title</label>
+  
+      <input
+        id="title"
+        type="text"
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+        placeholder="Enter note title"
+        aria-invalid={!!errors.title}
+        aria-describedby={errors.title ? "title-error" : undefined}
+        className={errors.title ? "input-error" : ""}
+      />
+  
+      {errors.title && (
+        <p id="title-error" className="field-error">
+          {errors.title}
+        </p>
+      )}
+    </div>
       <div className="form-group">
         <label htmlFor="content">Content</label>
 
