@@ -1,21 +1,14 @@
 module.exports = {
-    testEnvironment: "jsdom",
-    transform: {
-      "^.+\\.(js|jsx)$": "babel-jest",
-    },
-    setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
-  };
+  testEnvironment: "jsdom",
 
-module.exports = {
-    testEnvironment: "jsdom",
-  
-    transform: {
-      "^.+\\.jsx?$": "babel-jest",
-    },
-  
-    setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
-  
-    moduleNameMapper: {
-      "\\.(css|less|scss|sass)$": "identity-obj-proxy",
-    },
-  };
+  transform: {
+    "^.+\\.jsx?$": "babel-jest",
+  },
+
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
+
+  moduleNameMapper: {
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+    "\\.(png|jpg|jpeg|gif|svg)$": "<rootDir>/src/__mocks__/fileMock.js",
+  },
+};
