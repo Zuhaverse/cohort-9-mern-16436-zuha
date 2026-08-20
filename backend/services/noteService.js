@@ -1,3 +1,4 @@
+const db = require("../config/db");
 const noteModel = require("../models/noteModel");
 const logger = require("../logger/logger");
 
@@ -27,6 +28,27 @@ async function createNote(noteData) {
             throw error;
         }
     }
+
+    async function getNoteById(userId, noteId) {
+        let connection;
+      
+        try {
+          connection = await db.getConnection();
+      
+          const [rows] = await connection.query(
+            "SELECT * FROM notes WHERE user_id = ? AND id = ?",
+            [userId, noteId]
+          );
+      
+          return rows[0];
+        } catch (error) {
+          throw error;
+        } finally {
+          if (connection) {
+            connection.release();
+          }
+        }
+      }
 
     async function updateNote(noteData) {
         const {title,content,userId,noteId} = noteData;
@@ -76,6 +98,7 @@ async function createNote(noteData) {
 module.exports = {
     createNote,
     getNotesByUser,
+    getNoteById,
     updateNote,
     deleteNote
 }

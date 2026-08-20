@@ -1,0 +1,140 @@
+@import 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Schoolbell&display=swap';
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.form-group input,
+.form-group textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 13px 14px;
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  color: #1f2937;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input {
+  height: 46px;
+}
+
+.form-group textarea {
+  min-height: 220px;
+  resize: vertical;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #9ca3af;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #ffb452;
+  box-shadow: 0 0 0 3px rgba(255, 180, 82, 0.12);
+}
+
+.input-error {
+  border-color: #dc2626 !important;
+}
+
+.field-error,
+.form-error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 13px;
+}
+
+
+.note-form button {
+  align-self: center;
+  min-width: 150px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffb452;
+  color: #ffffff;
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.note-form button:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+.note-form button:active {
+  transform: translateY(0);
+}
+
+.note-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+@media (max-width: 768px) {
+  .note-form {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .note-form {
+    gap: 16px;
+  }
+
+  .form-group {
+    gap: 7px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .form-group input {
+    height: 44px;
+  }
+
+  .form-group textarea {
+    min-height: 180px;
+  }
+
+  .note-form button {
+    width: 100%;
+    max-width: 250px;
+    padding: 12px 20px;
+  }
+}

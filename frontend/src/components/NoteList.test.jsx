@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import NoteList from "./NoteList";
+import { BrowserRouter } from "react-router-dom";
 
 test("renders all notes", () => {
   const notes = [
@@ -17,8 +18,11 @@ test("renders all notes", () => {
     },
   ];
 
-  render(<NoteList notes={notes} />);
-
+  render(
+    <BrowserRouter>
+      <NoteList notes={notes} />
+    </BrowserRouter>
+  );
   expect(screen.getByText("First Note")).toBeInTheDocument();
   expect(screen.getByText("Learning MERN stack")).toBeInTheDocument();
 

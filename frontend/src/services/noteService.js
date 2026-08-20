@@ -9,3 +9,27 @@ export const getNotes = async () => {
 
   return response.data;
 };
+
+export const getNote = async (id) => {
+  const response = await axios.get(`${API_URL}/${id}`, {
+    withCredentials: true,
+  });
+
+  return response.data;
+};
+
+export const createNote = async (noteData) => {
+  const response = await axios.post(API_URL, noteData, {
+    withCredentials: true,
+  });
+
+  return response.data;
+};
+
+export const updateNote = async (id, noteData) => {
+  const response = await axios.put(`${API_URL}/${id}`, noteData, {
+    withCredentials: true,
+  });
+
+  return response.data;
+};
