@@ -23,7 +23,7 @@ function Signup() {
       });
 
       navigate("/login");
-    } catch (error) {
+    } catch{
       setError("Registration failed. Please try again.");
     }
   };

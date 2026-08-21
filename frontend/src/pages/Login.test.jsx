@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import Login from "./Login";
@@ -58,9 +58,9 @@ test("logs in successfully and redirects to dashboard", async () => {
   );
 
   await waitFor(() => {
-    expect(loginUser).toHaveBeenCalledWith({
-      email: "test@example.com",
-      password: "password123",
-    });
+    expect(loginUser).toHaveBeenCalledWith(
+      "test@example.com",
+      "password123"
+    );
   });
 });
