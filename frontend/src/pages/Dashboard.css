@@ -3,7 +3,7 @@
 body {
   margin: 0;
   background-color: #ffffff;
-  font-family: "Inter", sans-serif;
+  font-family: Inter, sans-serif;
   color: #222;
 }
 
@@ -33,7 +33,7 @@ body {
 }
 
 .brand-name {
-  font-family: "Schoolbell", cursive;
+  font-family: Schoolbell, cursive;
   font-size: 20px;
   font-weight: 400;
   color: #222;
@@ -45,7 +45,7 @@ body {
   padding: 11px 18px;
   background-color: #222;
   color: white;
-  font-family: "Inter", sans-serif;
+  font-family: Inter, sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;

@@ -1,3 +1,10 @@
+jest.mock("./services/noteService", () => ({
+  getNotes: jest.fn(),
+  getNote: jest.fn(),
+  createNote: jest.fn(),
+  updateNote: jest.fn(),
+  deleteNote: jest.fn(),
+}));
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 

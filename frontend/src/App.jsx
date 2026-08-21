@@ -1,9 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Placeholder from "./pages/Placeholder";
+//import Placeholder from "./pages/Placeholder";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
+import CreateNote from "./pages/CreateNote";
+import EditNote from "./pages/EditNote";
 
 function App() {
   return (
@@ -25,7 +27,16 @@ function App() {
   path="/notes/new"
   element={
     <ProtectedRoute>
-      <Placeholder />
+      <CreateNote />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/notes/:id/edit"
+  element={
+    <ProtectedRoute>
+      <EditNote />
     </ProtectedRoute>
   }
 />

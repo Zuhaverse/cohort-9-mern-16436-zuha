@@ -38,6 +38,31 @@ async function getNotesByUser(req, res, next) {
     next(error);
   }
   }
+
+  async function getNoteById(req, res, next) {
+    try {
+      const userId = req.user.id;
+      const noteId = req.params.id;
+  
+      const result = await noteService.getNoteById(userId, noteId);
+  
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: "Note not found",
+          data: null,
+        });
+      }
+  
+      return res.status(200).json({
+        success: true,
+        message: "Note fetched successfully",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   
 async function updateNote(req, res, next) {
   try{
@@ -88,6 +113,7 @@ async function deleteNote(req,res,next) {
 module.exports = {
   createNote,
   getNotesByUser,
+  getNoteById,
   updateNote,
   deleteNote
 };

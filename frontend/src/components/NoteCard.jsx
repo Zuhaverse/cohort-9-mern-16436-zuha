@@ -1,6 +1,10 @@
+import { useNavigate } from "react-router-dom";
+import { Pencil } from "lucide-react";
 import "./NoteCard.css";
 
 function NoteCard({ note }) {
+  const navigate = useNavigate();
+
   const formattedDate = new Date(note.created_at).toLocaleDateString(
     "en-US",
     {
@@ -12,12 +16,25 @@ function NoteCard({ note }) {
 
   return (
     <div className="note-card">
-      <h3>{note.title}</h3>
+      <div className="note-card-header">
+        <h3>{note.title}</h3>
+
+        <button
+          type="button"
+          className="edit-note-btn"
+          onClick={() => navigate(`/notes/${note.id}/edit`)}
+          aria-label={`Edit ${note.title}`}
+        >
+          <Pencil size={17} strokeWidth={2} />
+        </button>
+      </div>
+
       <p>
-  {note.content.length > 120
-    ? `${note.content.substring(0, 120)}...`
-    : note.content}
-</p>
+        {note.content.length > 120
+          ? `${note.content.substring(0, 120)}...`
+          : note.content}
+      </p>
+
       <small>{formattedDate}</small>
     </div>
   );

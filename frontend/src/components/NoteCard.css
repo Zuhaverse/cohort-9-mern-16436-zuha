@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    background-color: #ffb45294;
+    background-color: rgba(255, 183, 88, 0.557);
     border: 2px solid #ffb452;
     color: #252525;
     border-radius: 14px;
@@ -15,6 +15,44 @@
   .note-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  .note-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  
+  .note-card-header h3 {
+    margin: 0;
+  }
+  
+  .edit-note-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: #252525;
+    cursor: pointer;
+    transition: background-color 0.2s ease,
+                color 0.2s ease,
+                transform 0.2s ease;
+  }
+  
+  .edit-note-btn:hover {
+    background-color: #fff3df;
+    color: #ffb452;
+    transform: translateY(-1px);
+  }
+  
+  .edit-note-btn:active {
+    transform: translateY(0);
   }
   
   .note-card h3 {

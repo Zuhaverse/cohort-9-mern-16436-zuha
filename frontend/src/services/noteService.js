@@ -1,9 +1,33 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/notes";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/notes`;
 
 export const getNotes = async () => {
   const response = await axios.get(API_URL, {
+    withCredentials: true,
+  });
+
+  return response.data;
+};
+
+export const getNote = async (id) => {
+  const response = await axios.get(`${API_URL}/${id}`, {
+    withCredentials: true,
+  });
+
+  return response.data;
+};
+
+export const createNote = async (noteData) => {
+  const response = await axios.post(API_URL, noteData, {
+    withCredentials: true,
+  });
+
+  return response.data;
+};
+
+export const updateNote = async (id, noteData) => {
+  const response = await axios.put(`${API_URL}/${id}`, noteData, {
     withCredentials: true,
   });
 
