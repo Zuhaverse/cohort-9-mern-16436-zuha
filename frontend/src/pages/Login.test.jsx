@@ -42,25 +42,31 @@ test("logs in successfully and redirects to dashboard", async () => {
       <Login />
     </MemoryRouter>
   );
-
-  await userEvent.type(
-    screen.getByLabelText(/email/i),
-    "test@example.com"
-  );
-
-  await userEvent.type(
-    screen.getByLabelText(/password/i),
-    "password123"
-  );
-
-  await userEvent.click(
-    screen.getByRole("button", { name: /login/i })
-  );
-
-  await waitFor(() => {
-    expect(loginUser).toHaveBeenCalledWith(
-      "test@example.com",
+  try {
+    await userEvent.type(
+      screen.getByLabelText(/email/i),
+      "test@example.com"
+    );
+  
+    await userEvent.type(
+      screen.getByLabelText(/password/i),
       "password123"
     );
-  });
+  
+    await userEvent.click(
+      screen.getByRole("button", { name: /login/i })
+    );
+  
+    await waitFor(() => {
+      expect(loginUser).toHaveBeenCalledWith({
+        email: "test@example.com",
+        password: "password123",
+      });
+    });
+  } catch (error) {
+    throw new Error(
+      `Login flow test failed: ${error.message}`,
+      { cause: error }
+    );
+  }
 });

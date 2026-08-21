@@ -15,7 +15,7 @@ function Login() {
     e.preventDefault();
   
     try {
-      await loginUser(email, password);
+      await loginUser({ email, password });
       navigate("/dashboard");
     } catch (error) {
       setError(

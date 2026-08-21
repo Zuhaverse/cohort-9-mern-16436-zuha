@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import "./NoteCard.css";
 
 function NoteCard({ note, onDelete }) {
+  const deleteButtonRef = useRef(null);
+  const modalRef = useRef(null);
   const navigate = useNavigate();
+
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -17,6 +20,15 @@ function NoteCard({ note, onDelete }) {
     }
   );
 
+  const closeModal = () => {
+    if (deleting) {
+      return;
+    }
+
+    setShowConfirm(false);
+    deleteButtonRef.current?.focus();
+  };
+
   const handleDelete = async () => {
     try {
       setDeleting(true);
@@ -28,6 +40,54 @@ function NoteCard({ note, onDelete }) {
       setDeleting(false);
     }
   };
+
+  useEffect(() => {
+    if (!showConfirm) {
+      return;
+    }
+  
+    modalRef.current?.focus();
+  
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape" && !deleting) {
+        setShowConfirm(false);
+        deleteButtonRef.current?.focus();
+        return;
+      }
+  
+      if (event.key === "Tab") {
+        const focusableElements =
+          modalRef.current?.querySelectorAll(
+            'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          );
+  
+        if (!focusableElements?.length) {
+          return;
+        }
+  
+        const firstElement = focusableElements[0];
+        const lastElement =
+          focusableElements[focusableElements.length - 1];
+  
+        if (event.shiftKey && document.activeElement === firstElement) {
+          event.preventDefault();
+          lastElement.focus();
+        } else if (
+          !event.shiftKey &&
+          document.activeElement === lastElement
+        ) {
+          event.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+  
+    document.addEventListener("keydown", handleKeyDown);
+  
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [showConfirm, deleting]);
 
   return (
     <>
@@ -46,6 +106,7 @@ function NoteCard({ note, onDelete }) {
             </button>
 
             <button
+              ref={deleteButtonRef}
               type="button"
               className="delete-note-btn"
               onClick={() => setShowConfirm(true)}
@@ -67,8 +128,15 @@ function NoteCard({ note, onDelete }) {
 
       {showConfirm && (
         <div className="modal-overlay">
-          <div className="delete-modal">
-            <h2>Delete Note?</h2>
+          <div
+            ref={modalRef}
+            className="delete-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-modal-title"
+            tabIndex="-1"
+          >
+            <h2 id="delete-modal-title">Delete Note?</h2>
 
             <p>
               Are you sure you want to delete{" "}
@@ -79,19 +147,20 @@ function NoteCard({ note, onDelete }) {
               <button
                 type="button"
                 className="cancel-btn"
-                onClick={() => setShowConfirm(false)}
+                onClick={closeModal}
+                disabled={deleting}
               >
                 Cancel
               </button>
 
               <button
-  type="button"
-  className="confirm-delete-btn"
-  onClick={handleDelete}
-  disabled={deleting}
->
-  {deleting ? "Deleting..." : "Delete"}
-</button>
+                type="button"
+                className="confirm-delete-btn"
+                onClick={handleDelete}
+                disabled={deleting}
+              >
+                {deleting ? "Deleting..." : "Delete"}
+              </button>
             </div>
           </div>
         </div>

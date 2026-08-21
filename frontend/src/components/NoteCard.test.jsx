@@ -14,34 +14,41 @@ describe("NoteCard delete flow", () => {
   test("confirms and deletes a note", async () => {
     const user = userEvent.setup();
     const onDelete = jest.fn().mockResolvedValue();
-
+  
     render(
       <MemoryRouter>
         <NoteCard note={note} onDelete={onDelete} />
       </MemoryRouter>
     );
-
-    const deleteButton = screen.getByRole("button", {
-      name: "Delete Test Note",
-    });
-
-    await user.click(deleteButton);
-
-    expect(
-      screen.getByRole("heading", { name: "Delete Note?" })
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByText(/Are you sure you want to delete/i)
-    ).toBeInTheDocument();
-
-    const confirmButton = screen.getByRole("button", {
-      name: "Delete",
-    });
-
-    await user.click(confirmButton);
-
-    expect(onDelete).toHaveBeenCalledWith(1);
-    expect(onDelete).toHaveBeenCalledTimes(1);
+  
+    try {
+      const deleteButton = screen.getByRole("button", {
+        name: "Delete Test Note",
+      });
+  
+      await user.click(deleteButton);
+  
+      expect(
+        screen.getByRole("heading", { name: "Delete Note?" })
+      ).toBeInTheDocument();
+  
+      expect(
+        screen.getByText(/Are you sure you want to delete/i)
+      ).toBeInTheDocument();
+  
+      const confirmButton = screen.getByRole("button", {
+        name: "Delete",
+      });
+  
+      await user.click(confirmButton);
+  
+      expect(onDelete).toHaveBeenCalledWith(1);
+      expect(onDelete).toHaveBeenCalledTimes(1);
+    } catch (error) {
+      throw new Error(
+        `Note deletion flow test failed: ${error.message}`,
+        { cause: error }
+      );
+    }
   });
 });

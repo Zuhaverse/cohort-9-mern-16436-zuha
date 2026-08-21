@@ -65,19 +65,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 34px;
   height: 34px;
   padding: 0;
-
   border: none;
   border-radius: 7px;
-
   background: transparent;
   color: #252525;
-
   cursor: pointer;
-
   transition: background-color 0.2s ease,
               color 0.2s ease,
               transform 0.2s ease;
@@ -96,35 +91,26 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 20px;
-
   background-color: rgba(0, 0, 0, 0.35);
-
   z-index: 1000;
 }
 
 .delete-modal {
   width: 100%;
   max-width: 420px;
-
   padding: 28px;
-
   box-sizing: border-box;
-
   background-color: #ffffff;
   border-radius: 14px;
-
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .delete-modal h2 {
   margin: 0 0 10px;
-
   font-size: 21px;
   font-weight: 600;
   color: #252525;
@@ -132,7 +118,6 @@
 
 .delete-modal p {
   margin: 0;
-
   font-size: 14px;
   line-height: 1.6;
   color: #6b7280;
@@ -146,21 +131,16 @@
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-
   margin-top: 24px;
 }
 
 .modal-actions button {
   padding: 10px 18px;
-
   border-radius: 7px;
-
   font-family: Inter, sans-serif;
   font-size: 14px;
   font-weight: 500;
-
   cursor: pointer;
-
   transition: background-color 0.2s ease,
               transform 0.2s ease;
 }
