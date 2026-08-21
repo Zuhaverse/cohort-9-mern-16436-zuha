@@ -33,3 +33,11 @@ export const updateNote = async (id, noteData) => {
 
   return response.data;
 };
+
+export const deleteNote = async (id) => {
+  const response = await axios.delete(`${API_URL}/${id}`, {
+    withCredentials: true,
+  });
+
+  return response.data;
+};
