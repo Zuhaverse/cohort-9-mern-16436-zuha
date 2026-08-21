@@ -62,22 +62,29 @@ describe("NoteCard delete flow", () => {
       </MemoryRouter>
     );
   
-    const deleteButton = screen.getByRole("button", {
-      name: "Delete Test Note",
-    });
+    try {
+      const deleteButton = screen.getByRole("button", {
+        name: "Delete Test Note",
+      });
   
-    await user.click(deleteButton);
+      await user.click(deleteButton);
   
-    const dialog = screen.getByRole("dialog");
+      const dialog = screen.getByRole("dialog");
   
-    const confirmDeleteButton = screen.getByRole("button", {
-      name: "Delete",
-    });
+      const confirmDeleteButton = screen.getByRole("button", {
+        name: "Delete",
+      });
   
-    expect(dialog).toHaveFocus();
+      expect(dialog).toHaveFocus();
   
-    await user.keyboard("{Shift>}{Tab}{/Shift}");
+      await user.keyboard("{Shift>}{Tab}{/Shift}");
   
-    expect(confirmDeleteButton).toHaveFocus();
+      expect(confirmDeleteButton).toHaveFocus();
+    } catch (error) {
+      throw new Error(
+        `Note focus trap test failed: ${error.message}`,
+        { cause: error }
+      );
+    }
   });
 });
