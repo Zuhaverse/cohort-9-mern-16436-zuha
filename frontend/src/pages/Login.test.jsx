@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import { loginUser } from "../services/authService";
 
@@ -37,32 +37,45 @@ test("logs in successfully and redirects to dashboard", async () => {
     data: {},
   });
 
+  const user = userEvent.setup();
+
   render(
-    <MemoryRouter>
-      <Login />
+    <MemoryRouter initialEntries={["/login"]}>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={<h1>Dashboard</h1>}
+        />
+      </Routes>
     </MemoryRouter>
   );
+
   try {
-    await userEvent.type(
+    await user.type(
       screen.getByLabelText(/email/i),
       "test@example.com"
     );
-  
-    await userEvent.type(
+
+    await user.type(
       screen.getByLabelText(/password/i),
       "password123"
     );
-  
-    await userEvent.click(
+
+    await user.click(
       screen.getByRole("button", { name: /login/i })
     );
-  
+
     await waitFor(() => {
       expect(loginUser).toHaveBeenCalledWith({
         email: "test@example.com",
         password: "password123",
       });
     });
+
+    expect(
+      await screen.findByRole("heading", { name: "Dashboard" })
+    ).toBeInTheDocument();
   } catch (error) {
     throw new Error(
       `Login flow test failed: ${error.message}`,

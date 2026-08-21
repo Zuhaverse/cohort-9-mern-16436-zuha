@@ -51,4 +51,33 @@ describe("NoteCard delete flow", () => {
       );
     }
   });
+
+  test("keeps focus inside the confirmation dialog when Shift+Tab is pressed from the dialog root", async () => {
+    const user = userEvent.setup();
+    const onDelete = jest.fn().mockResolvedValue();
+  
+    render(
+      <MemoryRouter>
+        <NoteCard note={note} onDelete={onDelete} />
+      </MemoryRouter>
+    );
+  
+    const deleteButton = screen.getByRole("button", {
+      name: "Delete Test Note",
+    });
+  
+    await user.click(deleteButton);
+  
+    const dialog = screen.getByRole("dialog");
+  
+    const confirmDeleteButton = screen.getByRole("button", {
+      name: "Delete",
+    });
+  
+    expect(dialog).toHaveFocus();
+  
+    await user.keyboard("{Shift>}{Tab}{/Shift}");
+  
+    expect(confirmDeleteButton).toHaveFocus();
+  });
 });

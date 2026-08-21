@@ -54,27 +54,34 @@ function NoteCard({ note, onDelete }) {
         deleteButtonRef.current?.focus();
         return;
       }
-  
+    
       if (event.key === "Tab") {
-        const focusableElements =
-          modalRef.current?.querySelectorAll(
-            'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
-          );
-  
+        const focusableElements = modalRef.current?.querySelectorAll(
+          'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+    
         if (!focusableElements?.length) {
           return;
         }
-  
+    
         const firstElement = focusableElements[0];
         const lastElement =
           focusableElements[focusableElements.length - 1];
-  
-        if (event.shiftKey && document.activeElement === firstElement) {
+    
+        const activeElement = document.activeElement;
+    
+        if (
+          event.shiftKey &&
+          (activeElement === firstElement ||
+            activeElement === modalRef.current ||
+            !modalRef.current?.contains(activeElement))
+        ) {
           event.preventDefault();
           lastElement.focus();
         } else if (
           !event.shiftKey &&
-          document.activeElement === lastElement
+          (activeElement === lastElement ||
+            !modalRef.current?.contains(activeElement))
         ) {
           event.preventDefault();
           firstElement.focus();
