@@ -47,7 +47,7 @@ export function AuthProvider({ children }) {
   const login = async ({ email, password }) => {
     const operationId = ++authOperationRef.current;
   
-    const response = await loginUser(email, password);
+    const response = await loginUser({ email, password });
   
     if (operationId !== authOperationRef.current) return;
   
