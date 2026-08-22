@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./NoteForm.css";
+import RichTextEditor from "./RichTextEditor";
 
 function NoteForm({
   initialData = { title: "", content: "" },
@@ -10,6 +11,7 @@ function NoteForm({
   const [title, setTitle] = useState(initialData.title || "");
   const [content, setContent] = useState(initialData.content || "");
   const [errors, setErrors] = useState({});
+  const plainTextContent = content.replace(/<[^>]*>/g, "").trim();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,7 +22,7 @@ function NoteForm({
       newErrors.title = "Title is required.";
     }
 
-    if (!content.trim()) {
+    if (!plainTextContent) {
       newErrors.content = "Content is required.";
     }
 
@@ -75,15 +77,10 @@ function NoteForm({
       <div className="form-group">
         <label htmlFor="content">Content</label>
 
-        <textarea
-  id="content"
+        <RichTextEditor
   value={content}
-  onChange={(event) => setContent(event.target.value)}
+  onChange={setContent}
   placeholder="Write your note..."
-  rows="10"
-  aria-invalid={!!errors.content}
-  aria-describedby={errors.content ? "content-error" : undefined}
-  className={errors.content ? "input-error" : ""}
 />
 
 {errors.content && (
