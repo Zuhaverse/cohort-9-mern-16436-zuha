@@ -25,3 +25,15 @@ export const verifySession = async () => {
 
   return response.data;
 };
+
+export const logoutUser = async () => {
+  const response = await axios.post(
+    `${API_URL}/logout`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};

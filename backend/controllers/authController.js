@@ -34,13 +34,43 @@ async function loginUser(req, res, next) {
   }
 }
 
-async function getCurrentUser(req, res) {
+async function getCurrentUser(req, res, next) {
+  try {
+    const user = await authService.getCurrentUser(req.user.id);
+
+    return res.status(200).json({
+      success: true,
+      authenticated: true,
+      data: {
+        user,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function logoutUser(req, res) {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
+
   return res.status(200).json({
     success: true,
-    authenticated: true,
-    data: {
-      user: req.user,
-    },
+    message: "Logout successful",
+  });
+}async function logoutUser(req, res) {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Logout successful",
   });
 }
 
@@ -48,4 +78,5 @@ module.exports = {
   registerUser,
   loginUser,
   getCurrentUser,
+  logoutUser,
 };

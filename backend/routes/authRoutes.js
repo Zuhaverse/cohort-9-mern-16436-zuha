@@ -6,11 +6,13 @@ const {
   registerUser,
   loginUser,
   getCurrentUser,
+  logoutUser,
 } = require("../controllers/authController");
 
 
 router.post("/register",validateRegister, registerUser);
 router.post("/login",validateLogin, loginUser);
+router.post("/logout", logoutUser);
 router.get("/protected", authMiddleware, (req, res) => {
     res.status(200).json({
       message: "Protected route accessed successfully",

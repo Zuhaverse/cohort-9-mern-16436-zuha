@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getNotes, deleteNote } from "../services/noteService";
+import { useAuth } from "../context/AuthContext";
 import NoteList from "../components/NoteList";
 import logo from "../assets/logo.png";
 
@@ -8,11 +9,14 @@ import "./Dashboard.css";
 
 function Dashboard() {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  console.log("Current user:", user);
 
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deleteError, setDeleteError] = useState("");
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -53,22 +57,73 @@ function Dashboard() {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
   return (
     <div className="dashboard">
       <header className="dashboard-nav">
-        <div className="brand">
-          <img className="logo" src={logo} alt="NoteSpace logo" />
-          <span className="brand-name">NoteSpace</span>
+  <div className="brand">
+    <img className="logo" src={logo} alt="NoteSpace logo" />
+    <span className="brand-name">NoteSpace</span>
+  </div>
+
+  <div className="dashboard-actions">
+  {user && (
+  <div className="user-profile-wrapper">
+  <button
+    type="button"
+    className="user-profile"
+    onClick={() => setShowProfileMenu((current) => !current)}
+    aria-expanded={showProfileMenu}
+    aria-haspopup="true"
+    aria-label={`Open profile menu for ${user.name}`}
+  >
+    <div className="user-avatar">
+      {user.name?.charAt(0).toUpperCase()}
+    </div>
+  </button>
+
+  {showProfileMenu && (
+    <div className="profile-dropdown">
+      <div className="dropdown-user-info">
+        <div className="dropdown-avatar">
+          {user.name?.charAt(0).toUpperCase()}
         </div>
 
-        <button
-          type="button"
-          className="create-note-btn"
-          onClick={() => navigate("/notes/new")}
-        >
-          + Create Note
-        </button>
-      </header>
+        <div>
+          <strong>{user.name}</strong>
+          <span>{user.email}</span>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        className="logout-btn"
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
+    </div>
+  )}
+</div>
+)}
+
+    <button
+      type="button"
+      className="create-note-btn"
+      onClick={() => navigate("/notes/new")}
+    >
+      + Create Note
+    </button>
+  </div>
+</header>
       {deleteError && (
   <p className="dashboard-message error" role="alert">
     {deleteError}
@@ -85,15 +140,16 @@ function Dashboard() {
 
         {notes.length === 0 ? (
           <div className="empty-state">
-            <h2>No notes yet</h2>
-            <p>Create your first note and start writing.</p>
+            <h2>Your space is empty</h2>
+            <p>Create a note to get started.</p>
 
             <button
               type="button"
               className="create-note-btn"
+              id="plus-btn"
               onClick={() => navigate("/notes/new")}
             >
-              Create your first note
+              +
             </button>
           </div>
         ) : (
