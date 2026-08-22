@@ -10,13 +10,42 @@ import "./Dashboard.css";
 function Dashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  console.log("Current user:", user);
 
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deleteError, setDeleteError] = useState("");
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const profileMenuRef = useRef(null);
+
+  useEffect(() => {
+    if (!showProfileMenu) {
+      return;
+    }
+  
+    const handleClickOutside = (event) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target)
+      ) {
+        setShowProfileMenu(false);
+      }
+    };
+  
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setShowProfileMenu(false);
+      }
+    };
+  
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+  
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [showProfileMenu]);
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -76,7 +105,7 @@ function Dashboard() {
 
   <div className="dashboard-actions">
   {user && (
-  <div className="user-profile-wrapper">
+  <div className="user-profile-wrapper" ref={profileMenuRef}>
   <button
     type="button"
     className="user-profile"
