@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import {
   verifySession,
   loginUser,
@@ -6,22 +6,37 @@ import {
   logoutUser,
 } from "../services/authService";
 
+/**
+ * Provides authentication state and actions to the application.
+ * @param {{ children: import("react").ReactNode }} props
+ */
+
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const authOperationRef = useRef(0);
 
   const checkSession = async () => {
+    const operationId = ++authOperationRef.current;
+  
     try {
       const response = await verifySession();
+  
+      if (operationId !== authOperationRef.current) return;
+  
       setUser(response.data.user);
       return true;
     } catch (error) {
+      if (operationId !== authOperationRef.current) return;
+  
       setUser(null);
       return false;
     } finally {
-      setLoading(false);
+      if (operationId === authOperationRef.current) {
+        setLoading(false);
+      }
     }
   };
 
@@ -29,13 +44,14 @@ export function AuthProvider({ children }) {
     checkSession();
   }, []);
 
-  const login = async (credentials) => {
-    const response = await loginUser(credentials);
-
-    const session = await verifySession();
-    setUser(session.data.user);
-
-    return response;
+  const login = async ({ email, password }) => {
+    const operationId = ++authOperationRef.current;
+  
+    const response = await loginUser(email, password);
+  
+    if (operationId !== authOperationRef.current) return;
+  
+    setUser(response.data.user);
   };
 
   const register = async (userData) => {
@@ -43,12 +59,11 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    try {
-      await logoutUser();
-    } finally {
-      setUser(null);
-    }
-  };
+    ++authOperationRef.current;
+  
+    await logoutUser();
+  setUser(null);
+};
 
   return (
     <AuthContext.Provider

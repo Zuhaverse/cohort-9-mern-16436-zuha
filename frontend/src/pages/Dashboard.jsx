@@ -17,6 +17,7 @@ function Dashboard() {
   const [deleteError, setDeleteError] = useState("");
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const profileMenuRef = useRef(null);
+  const profileButtonRef = useRef(null);
 
   useEffect(() => {
     if (!showProfileMenu) {
@@ -35,6 +36,7 @@ function Dashboard() {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         setShowProfileMenu(false);
+        profileButtonRef.current?.focus();
       }
     };
   
@@ -107,6 +109,7 @@ function Dashboard() {
   {user && (
   <div className="user-profile-wrapper" ref={profileMenuRef}>
   <button
+  ref={profileButtonRef}
     type="button"
     className="user-profile"
     onClick={() => setShowProfileMenu((current) => !current)}

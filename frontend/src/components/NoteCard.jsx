@@ -67,9 +67,10 @@ function NoteCard({ note, onDelete }) {
   
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
+        if (deleting) return;
+      
         setShowConfirm(false);
         deleteButtonRef.current?.focus();
-        return;
       }
     
       if (event.key === "Tab") {
@@ -114,7 +115,7 @@ function NoteCard({ note, onDelete }) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [showConfirm]);
+  }, [showConfirm], deleting);
 
   return (
     <>
