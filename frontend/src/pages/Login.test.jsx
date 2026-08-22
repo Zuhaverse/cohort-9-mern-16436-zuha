@@ -97,10 +97,10 @@ test("logs in successfully and redirects to dashboard", async () => {
     );
 
     await waitFor(() => {
-      expect(loginUser).toHaveBeenCalledWith(
-        "test@example.com",
-        "password123"
-      );
+      expect(loginUser).toHaveBeenCalledWith({
+        email: "test@example.com",
+        password: "password123",
+      });
     });
 
     expect(

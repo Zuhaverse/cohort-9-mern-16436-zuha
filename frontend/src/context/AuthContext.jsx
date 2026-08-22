@@ -46,12 +46,23 @@ export function AuthProvider({ children }) {
 
   const login = async ({ email, password }) => {
     const operationId = ++authOperationRef.current;
+    setLoading(true);
   
-    const response = await loginUser({ email, password });
+    try {
+      await loginUser({ email, password });
   
-    if (operationId !== authOperationRef.current) return;
+      if (operationId !== authOperationRef.current) return;
   
-    setUser(response.data.user);
+      const response = await verifySession();
+  
+      if (operationId !== authOperationRef.current) return;
+  
+      setUser(response.data.user);
+    } finally {
+      if (operationId === authOperationRef.current) {
+        setLoading(false);
+      }
+    }
   };
 
   const register = async (userData) => {
