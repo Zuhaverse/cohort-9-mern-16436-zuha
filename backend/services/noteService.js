@@ -5,7 +5,7 @@ const logger = require("../logger/logger");
 async function createNote(noteData) {
     const {title,content,userId} = noteData;
     try{
-        logger.info({title,content,userId},"Creating note");
+        logger.info({ userId }, "Creating note");
         const result = await noteModel.createNote(title,content,userId);
         logger.info({ userId }, "Note created successfully");
         return {
@@ -53,7 +53,7 @@ async function createNote(noteData) {
     async function updateNote(noteData) {
         const {title,content,userId,noteId} = noteData;
         try{
-            logger.info({title,content,userId,noteId},"Updating note");
+            logger.info({ userId, noteId }, "Updating note");
             const result = await noteModel.updateNote(title,content,userId,noteId);
 
             if (result.affectedRows === 0) {
