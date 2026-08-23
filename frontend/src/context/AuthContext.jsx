@@ -76,11 +76,18 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    ++authOperationRef.current;
-
-    await logoutUser();
-
-    setUser(null);
+    const operationId = ++authOperationRef.current;
+  
+    try {
+      await logoutUser();
+  
+      if (operationId === authOperationRef.current) {
+        setUser(null);
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      throw error;
+    }
   };
 
   return (

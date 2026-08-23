@@ -18,6 +18,7 @@ function NoteCard({ note, onDelete }) {
   const deleteButtonRef = useRef(null);
   const modalRef = useRef(null);
   const navigate = useNavigate();
+  const cancelButtonRef = useRef(null);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -57,8 +58,8 @@ function NoteCard({ note, onDelete }) {
       return;
     }
   
-    modalRef.current?.focus();
-     }, [showConfirm]);
+    cancelButtonRef.current?.focus();
+  }, [showConfirm]);
     
       useEffect(() => {
         if (!showConfirm) {
@@ -80,21 +81,18 @@ function NoteCard({ note, onDelete }) {
           return;
         }
         const focusableElements = [
-                   modal,
-                    ...modal.querySelectorAll(
-                      'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
-                    ),
-                  ];
+          ...modal.querySelectorAll(
+            'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          ),
+        ];
+        
         const firstElement = focusableElements[0];
-        const lastElement =
-          focusableElements[focusableElements.length - 1];
-    
+        const lastElement = focusableElements[focusableElements.length - 1];
         const activeElement = document.activeElement;
     
         if (
           event.shiftKey &&
           (activeElement === firstElement ||
-            activeElement === modalRef.current ||
             !modalRef.current?.contains(activeElement))
         ) {
           event.preventDefault();
@@ -169,6 +167,7 @@ function NoteCard({ note, onDelete }) {
 
             <div className="modal-actions">
               <button
+              ref={cancelButtonRef}
                 type="button"
                 className="cancel-btn"
                 onClick={closeModal}
