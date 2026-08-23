@@ -58,6 +58,11 @@ export function AuthProvider({ children }) {
       if (operationId !== authOperationRef.current) return;
   
       setUser(response.data.user);
+    } catch (error) {
+      if (operationId !== authOperationRef.current) return;
+  
+      setUser(null);
+      throw error;
     } finally {
       if (operationId === authOperationRef.current) {
         setLoading(false);
