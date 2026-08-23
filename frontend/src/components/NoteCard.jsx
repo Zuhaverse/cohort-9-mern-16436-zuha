@@ -115,7 +115,7 @@ function NoteCard({ note, onDelete }) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [showConfirm], deleting);
+  }, [showConfirm, deleting]);
 
   return (
     <>
