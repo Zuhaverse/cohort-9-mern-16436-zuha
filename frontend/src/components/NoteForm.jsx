@@ -83,7 +83,7 @@ function NoteForm({
   value={content}
   onChange={setContent}
   placeholder="Write your note..."
-  rows="10"
+  rows={10}
   id="content"
   ariaLabelledby="content-label"
   ariaInvalid={!!errors.content}

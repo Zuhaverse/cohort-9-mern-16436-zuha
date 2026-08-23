@@ -77,6 +77,7 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     const operationId = ++authOperationRef.current;
+    setLoading(true);
   
     try {
       await logoutUser();
@@ -87,9 +88,12 @@ export function AuthProvider({ children }) {
     } catch (error) {
       console.error("Logout error:", error);
       throw error;
+    } finally {
+      if (operationId === authOperationRef.current) {
+        setLoading(false);
+      }
     }
   };
-
   return (
     <AuthContext.Provider
       value={{

@@ -25,7 +25,14 @@ describe("NoteCard delete flow", () => {
       name: "Delete Test Note",
     });
 
-    await user.click(deleteButton);
+    try {
+      await user.click(deleteButton);
+    } catch (error) {
+      throw new Error(
+        `Failed to open delete confirmation dialog: ${error.message}`,
+        { cause: error }
+      );
+    }
 
     expect(
       screen.getByRole("heading", { name: "Delete Note?" })
@@ -39,7 +46,14 @@ describe("NoteCard delete flow", () => {
       name: "Delete",
     });
 
-    await user.click(confirmButton);
+    try {
+      await user.click(confirmButton);
+    } catch (error) {
+      throw new Error(
+        `Failed to confirm note deletion: ${error.message}`,
+        { cause: error }
+      );
+    }
 
     expect(onDelete).toHaveBeenCalledWith(1);
     expect(onDelete).toHaveBeenCalledTimes(1);
@@ -59,7 +73,14 @@ describe("NoteCard delete flow", () => {
       name: "Delete Test Note",
     });
 
-    await user.click(deleteButton);
+    try {
+      await user.click(deleteButton);
+    } catch (error) {
+      throw new Error(
+        `Failed to open delete confirmation dialog for focus test: ${error.message}`,
+        { cause: error }
+      );
+    }
 
     const cancelButton = screen.getByRole("button", {
       name: "Cancel",
@@ -71,7 +92,14 @@ describe("NoteCard delete flow", () => {
 
     expect(cancelButton).toHaveFocus();
 
-    await user.keyboard("{Shift>}{Tab}{/Shift}");
+    try {
+      await user.keyboard("{Shift>}{Tab}{/Shift}");
+    } catch (error) {
+      throw new Error(
+        `Failed to test Shift+Tab focus behavior: ${error.message}`,
+        { cause: error }
+      );
+    }
 
     expect(confirmDeleteButton).toHaveFocus();
   });
