@@ -14,34 +14,47 @@ describe("Auth API", function () {
   describe("GET /api/auth/me", function () {
     it("should return the current user when authenticated", async function () {
       const email = `me-test-${Date.now()}@example.com`;
-      const hashedPassword = await bcrypt.hash("123456", 10);
-  
-      const result = await userModel.createUser(
-        "Me Test User",
-        email,
-        hashedPassword
-      );
-  
-      const token = jwt.sign(
-        {
-          id: result.insertId,
-        },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "1h",
+    
+      try {
+        const hashedPassword = await bcrypt.hash("123456", 10);
+    
+        const result = await userModel.createUser(
+          "Me Test User",
+          email,
+          hashedPassword
+        );
+    
+        const token = jwt.sign(
+          {
+            id: result.insertId,
+          },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: "1h",
+          }
+        );
+    
+        const response = await request(app)
+          .get("/api/auth/me")
+          .set("Cookie", [`token=${token}`]);
+    
+        expect(response.status).to.equal(200);
+        expect(response.body.success).to.be.true;
+        expect(response.body.authenticated).to.be.true;
+        expect(response.body.data.user).to.have.property("id");
+        expect(response.body.data.user).to.have.property("name");
+        expect(response.body.data.user).to.have.property("email");
+      } catch (error) {
+        throw new Error(`Current user test failed: ${error.message}`, {
+          cause: error,
+        });
+      } finally {
+        try {
+          await userModel.deleteUserByEmail(email);
+        } catch (cleanupError) {
+          console.error("Test cleanup failed:", cleanupError);
         }
-      );
-  
-      const response = await request(app)
-        .get("/api/auth/me")
-        .set("Cookie", [`token=${token}`]);
-  
-      expect(response.status).to.equal(200);
-      expect(response.body.success).to.be.true;
-      expect(response.body.authenticated).to.be.true;
-      expect(response.body.data.user).to.have.property("id");
-      expect(response.body.data.user).to.have.property("name");
-      expect(response.body.data.user).to.have.property("email");
+      }
     });
   });
 
