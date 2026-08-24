@@ -141,7 +141,6 @@ describe("Validation Middleware", function () {
     expect(error.message).to.equal("Invalid note ID");
     expect(error.status).to.equal(400);
   });
-
   it("should validate a valid note ID", function () {
     const req = {
       params: {
@@ -156,6 +155,7 @@ describe("Validation Middleware", function () {
 
     expect(next.calledOnce).to.be.true;
     expect(next.firstCall.args.length).to.equal(0);
+    expect(req.params.id).to.be.a("number");
     expect(req.params.id).to.equal(5);
   });
 
@@ -163,7 +163,8 @@ describe("Validation Middleware", function () {
     const req = {
       body: {
         title: "My Note",
-        content: '<p>Hello</p><img src=x onerror="alert(1)"><script>alert(2)</script>',
+        content:
+          '<p>Hello</p><img src=x onerror="alert(1)"><script>alert(2)</script>',
       },
     };
 
@@ -177,5 +178,5 @@ describe("Validation Middleware", function () {
     expect(req.body.content).to.equal("<p>Hello</p>");
     expect(req.body.content).to.not.include("<script>");
     expect(req.body.content).to.not.include("onerror");
-});
+  });
 });

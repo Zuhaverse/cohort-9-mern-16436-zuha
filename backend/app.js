@@ -11,6 +11,7 @@ const authRoutes = require("./routes/authRoutes");
 const noteRoutes = require("./routes/noteRoutes");
 
 const app = express();
+app.disable("x-powered-by");
 
 app.use(loggerMiddleware);
 app.use(express.json());

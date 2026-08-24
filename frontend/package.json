@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "test": "jest",
+    "coverage": "jest --coverage --coverageDirectory=coverage",
     "preview": "vite preview"
   },
   "dependencies": {
