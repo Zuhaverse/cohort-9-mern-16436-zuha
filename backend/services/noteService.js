@@ -12,7 +12,7 @@ async function createNote(noteData) {
             message: "Note created successfully!"
         };
     } catch (error) {
-        logger.error(error,"Error creating note");
+        logger.error({ err: error, userId }, "Failed to create note");
         throw error;
     }
     }
@@ -24,7 +24,7 @@ async function createNote(noteData) {
             logger.info({userId},"Notes fetched successfully");
             return result;
         } catch (error) {
-            logger.error(error,"Error getting notes by user");
+            logger.error({ err: error, userId }, "Failed to fetch notes");
             throw error;
         }
     }
@@ -68,7 +68,10 @@ async function createNote(noteData) {
             };
         }
         catch (error) {
-            logger.error(error,"Error updating note");
+            logger.error(
+                { err: error, userId, noteId },
+                "Failed to update note"
+              );
             throw error;
         }
     }
@@ -90,7 +93,10 @@ async function createNote(noteData) {
             };
         }
         catch (error) {
-            logger.error(error,"Error deleting note");
+            logger.error(
+                { err: error, userId, noteId },
+                "Failed to delete note"
+              );
             throw error;
         }
     }

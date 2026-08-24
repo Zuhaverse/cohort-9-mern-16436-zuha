@@ -6,7 +6,9 @@ function authMiddleware(req, res, next) {
 
   if (!token) {
     return res.status(401).json({
-      message: "Access denied. No token provided.",
+      success: false,
+      message: "Authentication required",
+      data: null,
     });
   }
 
@@ -23,7 +25,9 @@ function authMiddleware(req, res, next) {
     );
 
     return res.status(401).json({
-      message: "Invalid or expired token.",
+      success: false,
+      message: "Invalid or expired token",
+      data: null,
     });
   }
 }

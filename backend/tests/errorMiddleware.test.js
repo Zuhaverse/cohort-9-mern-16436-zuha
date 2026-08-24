@@ -27,7 +27,8 @@ describe("Error Middleware", function () {
     expect(
       res.json.calledOnceWith({
         success: false,
-        message: "Test error"
+        message: "Test error",
+        data: null
       })
     ).to.be.true;
 
@@ -55,7 +56,8 @@ describe("Error Middleware", function () {
     expect(
       res.json.calledOnceWith({
         success: false,
-        message: "Internal Server Error"
+        message: "Internal Server Error",
+        data: null
       })
     ).to.be.true;
 
