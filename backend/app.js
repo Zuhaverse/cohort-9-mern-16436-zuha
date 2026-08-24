@@ -15,9 +15,15 @@ const app = express();
 app.use(loggerMiddleware);
 app.use(express.json());
 
+const frontendUrl = process.env.FRONTEND_URL;
+
+if (process.env.NODE_ENV === "production" && !frontendUrl) {
+  throw new Error("FRONTEND_URL must be set in production");
+}
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: frontendUrl || "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"],

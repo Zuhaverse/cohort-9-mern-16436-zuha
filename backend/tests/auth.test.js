@@ -1,6 +1,8 @@
 const request = require("supertest");
 const { expect } = require("chai");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const userModel = require("../models/userModel");
 
 const app = require("../app");
 
@@ -11,20 +13,29 @@ describe("Auth API", function () {
 
   describe("GET /api/auth/me", function () {
     it("should return the current user when authenticated", async function () {
+      const email = `me-test-${Date.now()}@example.com`;
+      const hashedPassword = await bcrypt.hash("123456", 10);
+  
+      const result = await userModel.createUser(
+        "Me Test User",
+        email,
+        hashedPassword
+      );
+  
       const token = jwt.sign(
         {
-          id: 1,
+          id: result.insertId,
         },
         process.env.JWT_SECRET,
         {
           expiresIn: "1h",
         }
       );
-
+  
       const response = await request(app)
         .get("/api/auth/me")
         .set("Cookie", [`token=${token}`]);
-
+  
       expect(response.status).to.equal(200);
       expect(response.body.success).to.be.true;
       expect(response.body.authenticated).to.be.true;
@@ -88,8 +99,14 @@ describe("Auth API", function () {
 
       const cookies = response.headers["set-cookie"];
 
-      expect(cookies).to.exist;
-      expect(cookies.some((cookie) => cookie.startsWith("token="))).to.be.true;
-    });
+expect(cookies).to.exist;
+
+const tokenCookie = cookies.find((cookie) =>
+  cookie.startsWith("token=")
+);
+
+expect(tokenCookie).to.exist;
+expect(tokenCookie).to.match(/token=;/);    
+});
   });
 });
