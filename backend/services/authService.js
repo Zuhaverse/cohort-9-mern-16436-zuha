@@ -96,7 +96,29 @@ async function loginUser(userData) {
   }
 }
 
+async function getCurrentUser(userId) {
+  try {
+    const user = await userModel.findUserById(userId);
+
+    if (!user) {
+      const error = new Error("User not found");
+      error.status = 401;
+      throw error;
+    }
+
+    return user;
+  } catch (error) {
+    if (error.status) {
+      throw error;
+    }
+
+    logger.error(error, "Failed to fetch current user");
+    throw error;
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
+  getCurrentUser,
 };

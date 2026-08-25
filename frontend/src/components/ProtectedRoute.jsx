@@ -1,28 +1,14 @@
-import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { verifySession } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
 function ProtectedRoute({ children }) {
-  const [authenticated, setAuthenticated] = useState(null);
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        await verifySession();
-        setAuthenticated(true);
-      } catch (error) {
-        setAuthenticated(false);
-      }
-    };
-
-    checkAuthentication();
-  }, []);
-
-  if (authenticated === null) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!authenticated) {
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 

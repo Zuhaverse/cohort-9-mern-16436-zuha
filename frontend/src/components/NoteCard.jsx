@@ -47,23 +47,32 @@ function NoteCard({ note, onDelete }) {
     }
   
     modalRef.current?.focus();
+     }, [showConfirm]);
+    
+      useEffect(() => {
+        if (!showConfirm) {
+          return;
+        }
   
     const handleKeyDown = (event) => {
-      if (event.key === "Escape" && !deleting) {
+      if (event.key === "Escape") {
         setShowConfirm(false);
         deleteButtonRef.current?.focus();
         return;
       }
     
       if (event.key === "Tab") {
-        const focusableElements = modalRef.current?.querySelectorAll(
-          'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
-        );
-    
-        if (!focusableElements?.length) {
+        const modal = modalRef.current;
+
+        if (!modal) {
           return;
         }
-    
+        const focusableElements = [
+                   modal,
+                    ...modal.querySelectorAll(
+                      'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+                    ),
+                  ];
         const firstElement = focusableElements[0];
         const lastElement =
           focusableElements[focusableElements.length - 1];
@@ -94,7 +103,7 @@ function NoteCard({ note, onDelete }) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [showConfirm, deleting]);
+  }, [showConfirm]);
 
   return (
     <>
