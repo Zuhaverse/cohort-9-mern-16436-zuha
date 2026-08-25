@@ -2,9 +2,9 @@
 
 body {
   margin: 0;
-  background-color: #ffffff;
+  background-color: #FEFEF2;
   font-family: Inter, sans-serif;
-  color: #222;
+  color: #1A1A1A;
 }
 
 .dashboard {
@@ -17,26 +17,53 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #ffffff;
+  background: linear-gradient(140deg, #d9e3c4, #aebd8f);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+.search-wrapper {
+  width: 240px;
+}
 
+.note-search {
+  width: 100%;
+  height: 40px;
+  padding: 0 15px;
+  box-sizing: border-box;
+  border: 1px solid #aebd8f;
+  border-radius: 20px;
+  background-color: #FEFEF2;
+  color: #252525;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  outline: none;
+  box-shadow:
+    inset 3px 3px 6px rgba(80, 95, 55, 0.18),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.35);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.note-search::placeholder {
+  color: #68705d;
+}
+
+.note-search:focus {
+  box-shadow:
+    inset 3px 3px 6px rgba(80, 95, 55, 0.18),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.35),
+    0 0 0 2px rgba(127, 143, 99, 0.18);
+}
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.logo {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-}
-
 .brand-name {
   font-family: Schoolbell, cursive;
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 25px;
+  font-weight: 500;
   color: #222;
 }
 
@@ -44,8 +71,8 @@ body {
   border: none;
   border-radius: 8px;
   padding: 11px 18px;
-  background-color: #ffaf46;
-  color: white;
+  background-color: #e7f4c8;
+  color: rgb(50, 70, 41);
   font-family: Inter, sans-serif;
   font-size: 14px;
   font-weight: 500;
@@ -58,12 +85,13 @@ body {
   opacity: 0.9;
 }
 #plus-btn {
-  width: 44px;
-  height: 44px;
+  width: 60px;
+  height: 60px;
   padding: 0;
-  border: none;
+  background-color: #bdcba0;
+  color: #1A1A1A;
   border-radius: 50%;
-  font-size: 26px;
+  font-size: 40px;
   font-weight: 400;
   line-height: 1;
   cursor: pointer;
@@ -85,6 +113,7 @@ body {
 }
 
 .dashboard-heading h1 {
+  color: rgb(50, 70, 41);
   margin: 0 0 8px;
   font-size: 34px;
   font-weight: 600;
@@ -93,7 +122,7 @@ body {
 
 .dashboard-heading p {
   margin: 0;
-  color: #777;
+  color: rgb(88, 115, 75);
   font-size: 15px;
 }
 
@@ -156,7 +185,7 @@ body {
 }
 
 .user-profile:focus-visible {
-  outline: 2px solid #ffb452;
+  outline: 2px solid #e7f4c8;
   outline-offset: 2px;
 }
 
@@ -164,8 +193,8 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: #ffb452;
-  color: white;
+  background-color: #e7f4c8;
+  color: rgb(50, 70, 41);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,7 +209,7 @@ body {
   right: 0;
   width: 240px;
   padding: 16px;
-  background: #ffffff;
+  background: #FEFEF2;
   border: 1px solid #e8e8e8;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
@@ -200,8 +229,8 @@ body {
   height: 40px;
   flex-shrink: 0;
   border-radius: 50%;
-  background-color: #ffb452;
-  color: white;
+  background-color: #bac79c;
+  color: #1A1A1A;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -253,6 +282,14 @@ body {
     padding: 0 20px;
   }
 
+  .search-wrapper {
+    width: 180px;
+  }
+
+  .dashboard-actions {
+    gap: 10px;
+  }
+
   .brand-name {
     font-size: 26px;
   }
@@ -275,5 +312,22 @@ body {
 
   .create-note-btn {
     padding: 10px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-wrapper {
+    width: 140px;
+  }
+
+  .note-search {
+    height: 36px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+
+  .create-note-btn {
+    padding: 9px 10px;
+    font-size: 12px;
   }
 }

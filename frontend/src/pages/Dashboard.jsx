@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { getNotes, deleteNote } from "../services/noteService";
 import { useAuth } from "../context/useAuth";
 import NoteList from "../components/NoteList";
-import logo from "../assets/logo.png";
 
 import "./Dashboard.css";
 
@@ -11,6 +10,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
+  const [searchTerm, setSearchTerm] = useState("");
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -97,15 +97,35 @@ function Dashboard() {
     }
   };
 
+  const filteredNotes = notes.filter((note) => {
+    const search = searchTerm.toLowerCase().trim();
+  
+    return (
+      note.title.toLowerCase().includes(search) ||
+      note.content
+        .replace(/<[^>]*>/g, "")
+        .toLowerCase()
+        .includes(search)
+    );
+  });
+
   return (
     <div className="dashboard">
       <header className="dashboard-nav">
   <div className="brand">
-    <img className="logo" src={logo} alt="NoteSpace logo" />
     <span className="brand-name">NoteSpace</span>
   </div>
-
   <div className="dashboard-actions">
+  <div className="search-wrapper">
+    <input
+      type="search"
+      className="note-search"
+      placeholder="Search your notes..."
+      value={searchTerm}
+      onChange={(event) => setSearchTerm(event.target.value)}
+      aria-label="Search notes"
+    />
+  </div>
   {user && (
   <div className="user-profile-wrapper" ref={profileMenuRef}>
   <button
@@ -184,8 +204,13 @@ function Dashboard() {
               +
             </button>
           </div>
+        ) : filteredNotes.length === 0 ? (
+          <div className="empty-state">
+            <h2>No notes found</h2>
+            <p>Try searching with a different word.</p>
+          </div>
         ) : (
-          <NoteList notes={notes} onDelete={handleDelete} />
+          <NoteList notes={filteredNotes} onDelete={handleDelete} />
         )}
       </main>
     </div>

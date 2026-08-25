@@ -22,6 +22,7 @@ function NoteCard({ note, onDelete }) {
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [showNote, setShowNote] = useState(false);
 
   const formattedDate = new Date(note.created_at).toLocaleDateString(
     "en-US",
@@ -117,7 +118,18 @@ function NoteCard({ note, onDelete }) {
 
   return (
     <>
-      <div className="note-card">
+      <div
+        className="note-card"
+        onClick={() => setShowNote(true)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setShowNote(true);
+    }
+  }}
+>
         <div className="note-card-header">
           <h3>{note.title}</h3>
 
@@ -125,7 +137,10 @@ function NoteCard({ note, onDelete }) {
             <button
               type="button"
               className="edit-note-btn"
-              onClick={() => navigate(`/notes/${note.id}/edit`)}
+              onClick={(event) => {
+                event.stopPropagation();
+                navigate(`/notes/${note.id}/edit`);
+              }}
               aria-label={`Edit ${note.title}`}
             >
               <Pencil size={17} strokeWidth={2} />
@@ -135,7 +150,10 @@ function NoteCard({ note, onDelete }) {
               ref={deleteButtonRef}
               type="button"
               className="delete-note-btn"
-              onClick={() => setShowConfirm(true)}
+              onClick={(event) => {
+                event.stopPropagation();
+                setShowConfirm(true);
+              }}
               aria-label={`Delete ${note.title}`}
             >
               <Trash2 size={17} strokeWidth={2} />
@@ -185,6 +203,41 @@ function NoteCard({ note, onDelete }) {
                 {deleting ? "Deleting..." : "Delete"}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showNote && (
+        <div
+          className="note-view-overlay"
+          onClick={() => setShowNote(false)}
+        >
+          <div
+            className="note-view-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="note-view-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="note-view-header">
+              <h2 id="note-view-title">{note.title}</h2>
+
+              <button
+                type="button"
+                className="close-note-btn"
+                onClick={() => setShowNote(false)}
+                aria-label="Close note"
+              >
+                ×
+              </button>
+            </div>
+
+            <div
+              className="note-view-content"
+              dangerouslySetInnerHTML={{ __html: note.content }}
+            />
+
+            <small>{formattedDate}</small>
           </div>
         </div>
       )}

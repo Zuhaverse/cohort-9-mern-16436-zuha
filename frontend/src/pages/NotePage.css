@@ -2,18 +2,32 @@
 
 .note-page {
     min-height: 100vh;
-    padding: 50px 24px;
-    background-color: #ffffff;
+    padding: 70px;
+    background-color: #FEFEF2;
     font-family: Inter, sans-serif;
     display:flex;
     flex-direction: column;
     align-items: center;
   }
+
+  .container {
+    width: 100%;
+    max-width: 540px;
+    padding: 40px;
+    background: linear-gradient(
+      5deg,
+      #aebd8f 0%,
+      #bac79c 65%,
+      #d3e3b2 100%
+    );
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(36, 38, 31, 0.06);
+  }
   
   .header {
     width: 100%;
     max-width: 700px;
-    margin: 0 auto 30px;
+    margin: 0 auto 15px;
     position: relative;
     display: flex;
     justify-content: center;
@@ -35,7 +49,7 @@
   
   .title-row p {
     margin: 0;
-    color: #6b7280;
+    color: #3b3c3f;
     font-size: 15px;
   }
   
@@ -59,8 +73,8 @@
   }
   
   .back-btn:hover {
-    background-color: #fff3df;
-    color: #ffb452;
+    background-color: #e7f4c8;
+    color: rgb(50, 70, 41);
   }
   
   .form-error {
@@ -71,4 +85,15 @@
     background-color: #fef2f2;
     color: #dc2626;
     font-size: 14px;
+  }
+
+  @media (max-width: 600px) {
+    .note-page {
+      padding: 30px 16px;
+    }
+  
+    .container {
+      padding: 28px 20px;
+      border-radius: 14px;
+    }
   }

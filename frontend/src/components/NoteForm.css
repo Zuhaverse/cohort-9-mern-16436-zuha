@@ -3,7 +3,6 @@
 .note-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
@@ -12,7 +11,6 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .form-group label {
@@ -29,7 +27,7 @@
   font-family: Inter, sans-serif;
   font-size: 15px;
   color: #1f2937;
-  background-color: #ffffff;
+  background-color: #FEFEF2;
   border: 1px solid #d1d5db;
   border-radius: 8px;
   outline: none;
@@ -52,7 +50,7 @@
 
 .form-group input:focus,
 .form-group textarea:focus {
-  border-color: #ffb452;
+  border-color: #e7f4c8;
   box-shadow: 0 0 0 3px rgba(255, 180, 82, 0.12);
 }
 
@@ -67,15 +65,14 @@
   font-size: 13px;
 }
 
-
 .note-form button {
   align-self: center;
   min-width: 150px;
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
-  background-color: #ffb452;
-  color: #ffffff;
+  background-color: #e7f4c8;
+  color: black;
   font-family: Inter, sans-serif;
   font-size: 15px;
   font-weight: 600;
