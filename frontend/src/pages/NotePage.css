@@ -3,7 +3,7 @@
 .note-page {
     min-height: 100vh;
     padding: 70px;
-    background-color: #FEFEF2;
+    background-color: #FFFDF5;
     font-family: Inter, sans-serif;
     display:flex;
     flex-direction: column;
@@ -14,12 +14,8 @@
     width: 100%;
     max-width: 540px;
     padding: 40px;
-    background: linear-gradient(
-      5deg,
-      #aebd8f 0%,
-      #bac79c 65%,
-      #d3e3b2 100%
-    );
+    background-color: #B5C192
+;
     border-radius: 18px;
     box-shadow: 0 8px 24px rgba(36, 38, 31, 0.06);
   }

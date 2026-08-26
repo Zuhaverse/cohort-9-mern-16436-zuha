@@ -9,7 +9,7 @@ const modules = {
     ["bold", "italic", "underline", "strike"],
     [{ list: "ordered" }, { list: "bullet" }],
     ["blockquote"],
-    [{ color: [] }, { align: [] }],
+    [{ align: [] }],
   ],
 };
 
@@ -22,7 +22,6 @@ const formats = [
   "list",
   "bullet",
   "blockquote",
-  "color",
   "align",
 ];
 
