@@ -125,14 +125,14 @@
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 .signup-card .button:hover {
-  background-color: #334126;
+  background-color: #7bdd20;
   transform: translateY(-1px);
 }
 .signup-card p {
   margin-top: 25px;
   text-align: center;
   font-size: 14px;
-  color: #58734B;
+  color: #c9380f;
 }
 .signup-card a {
   color: #3F4E2E;
