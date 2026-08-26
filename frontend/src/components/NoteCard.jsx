@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import "./NoteCard.css";
+import DOMPurify from "dompurify";
 
 function getPlainTextPreview(content, maxLength = 120) {
   const tempElement = document.createElement("div");
@@ -124,6 +125,10 @@ function NoteCard({ note, onDelete }) {
         role="button"
         tabIndex={0}
         onKeyDown={(event) => {
+          if (event.target !== event.currentTarget) {
+              return;
+          }
+            
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             setShowNote(true);
@@ -234,9 +239,8 @@ function NoteCard({ note, onDelete }) {
 
             <div
               className="note-view-content"
-              dangerouslySetInnerHTML={{ __html: note.content }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(note.content) }}
             />
-
             <small>{formattedDate}</small>
           </div>
         </div>

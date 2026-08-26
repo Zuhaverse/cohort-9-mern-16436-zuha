@@ -199,6 +199,7 @@ function Dashboard() {
               type="button"
               className="create-note-btn"
               id="plus-btn"
+              aria-label="Create note"
               onClick={() => navigate("/notes/new")}
             >
               +

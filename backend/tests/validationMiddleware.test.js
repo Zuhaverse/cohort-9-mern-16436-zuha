@@ -158,4 +158,24 @@ describe("Validation Middleware", function () {
     expect(next.firstCall.args.length).to.equal(0);
     expect(req.params.id).to.equal(5);
   });
+
+  it("should strip disallowed HTML tags and event handlers from note content", function () {
+    const req = {
+      body: {
+        title: "My Note",
+        content: '<p>Hello</p><img src=x onerror="alert(1)"><script>alert(2)</script>',
+      },
+    };
+
+    const res = {};
+    const next = sinon.spy();
+
+    validateNoteBody(req, res, next);
+
+    expect(next.calledOnce).to.be.true;
+    expect(next.firstCall.args.length).to.equal(0);
+    expect(req.body.content).to.equal("<p>Hello</p>");
+    expect(req.body.content).to.not.include("<script>");
+    expect(req.body.content).to.not.include("onerror");
+});
 });

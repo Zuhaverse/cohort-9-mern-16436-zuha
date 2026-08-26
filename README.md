@@ -55,7 +55,7 @@ This repository is the Cohort 9 MERN assignment for Zuha Wahab.
 
 ## Project Structure
 
-```
+```text
 .
 ├── backend/
 │   ├── app.js                 # Express app, CORS, routes
