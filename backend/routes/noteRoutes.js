@@ -7,7 +7,13 @@ const { validateNoteBody, validateNoteId } = require("../middleware/validationMi
 router.post("/", authMiddleware, validateNoteBody, noteController.createNote);
 router.get("/", authMiddleware, noteController.getNotesByUser);
 router.get("/:id",authMiddleware,validateNoteId,noteController.getNoteById);
-router.put("/:id", authMiddleware,validateNoteId, noteController.updateNote);
+router.put(
+    "/:id",
+    authMiddleware,
+    validateNoteId,
+    validateNoteBody,
+    noteController.updateNote
+);
 router.delete("/:id", authMiddleware,validateNoteId, noteController.deleteNote);
 
 module.exports = router;

@@ -77,10 +77,17 @@ function validateNoteBody(req, res, next) {
 
     const trimmedTitle = title.trim();
     const sanitizedContent = sanitizeHtml(content, quillAllowlist).trim();
-
-    if (!trimmedTitle || !sanitizedContent) {
-        return validationError("Title and content cannot be empty or whitespace", next);
-    }
+    const plainTextContent = sanitizeHtml(sanitizedContent, {
+        allowedTags: [],
+        allowedAttributes: {},
+      }).trim();
+      
+    if (!trimmedTitle || !plainTextContent) {
+        return validationError(
+          "Title and content cannot be empty or whitespace",
+          next
+        );
+      }
 
     req.body.title = trimmedTitle;
     req.body.content = sanitizedContent;
