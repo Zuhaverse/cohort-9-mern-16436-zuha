@@ -6,6 +6,11 @@ import NoteList from "../components/NoteList";
 
 import "./Dashboard.css";
 
+function getPlainText(html) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return doc.body.textContent || "";
+}
+
 function Dashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -99,19 +104,49 @@ function Dashboard() {
 
   const filteredNotes = notes.filter((note) => {
     const search = searchTerm.toLowerCase().trim();
+    const plainTextContent = getPlainText(note.content).toLowerCase();
   
     return (
       note.title.toLowerCase().includes(search) ||
-      note.content
-        .replace(/<[^>]*>/g, "")
-        .toLowerCase()
-        .includes(search)
+      plainTextContent.includes(search)
     );
   });
 
-  return (
-    <div className="dashboard">
-      <header className="dashboard-nav">
+  let notesContent;
+
+if (notes.length === 0) {
+  notesContent = (
+    <div className="empty-state">
+      <h2>Your space is empty</h2>
+      <p>Create a note to get started.</p>
+
+      <button
+        type="button"
+        className="create-note-btn"
+        id="plus-btn"
+        aria-label="Create note"
+        onClick={() => navigate("/notes/new")}
+      >
+        +
+      </button>
+    </div>
+  );
+} else if (filteredNotes.length === 0) {
+  notesContent = (
+    <div className="empty-state">
+      <h2>No notes found</h2>
+      <p>Try searching with a different word.</p>
+    </div>
+  );
+} else {
+  notesContent = (
+    <NoteList notes={filteredNotes} onDelete={handleDelete} />
+  );
+}
+
+return (
+  <div className="dashboard">
+   <header className="dashboard-nav">
   <div className="brand">
     <span className="brand-name">NoteSpace</span>
   </div>
@@ -189,30 +224,7 @@ function Dashboard() {
             <p>Keep your thoughts organized in one space.</p>
           </div>
         </div>
-
-        {notes.length === 0 ? (
-          <div className="empty-state">
-            <h2>Your space is empty</h2>
-            <p>Create a note to get started.</p>
-
-            <button
-              type="button"
-              className="create-note-btn"
-              id="plus-btn"
-              aria-label="Create note"
-              onClick={() => navigate("/notes/new")}
-            >
-              +
-            </button>
-          </div>
-        ) : filteredNotes.length === 0 ? (
-          <div className="empty-state">
-            <h2>No notes found</h2>
-            <p>Try searching with a different word.</p>
-          </div>
-        ) : (
-          <NoteList notes={filteredNotes} onDelete={handleDelete} />
-        )}
+        {notesContent}
       </main>
     </div>
   );

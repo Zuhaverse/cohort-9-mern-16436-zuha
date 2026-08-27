@@ -174,7 +174,7 @@ describe("Validation Middleware", function () {
     validateNoteBody(req, res, next);
 
     expect(next.calledOnce).to.be.true;
-    expect(next.firstCall.args.length).to.equal(0);
+    expect(next.firstCall.args).to.have.lengthOf(0);
     expect(req.body.content).to.equal("<p>Hello</p>");
     expect(req.body.content).to.not.include("<script>");
     expect(req.body.content).to.not.include("onerror");
