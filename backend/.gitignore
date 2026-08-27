@@ -1,2 +1,9 @@
 node_modules/
 .env
+
+# SonarQube
+.scannerwork/
+
+# Test coverage
+coverage/
+.nyc_output/

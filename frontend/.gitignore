@@ -34,3 +34,10 @@ dist-ssr
 .env
 .env.local
 .env.production
+
+# SonarQube
+.scannerwork/
+
+# Test coverage
+coverage/
+.nyc_output/
