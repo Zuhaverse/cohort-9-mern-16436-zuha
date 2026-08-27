@@ -125,12 +125,18 @@ function NoteCard({ note, onDelete }) {
     if (showNote && dialog && !dialog.open) {
       dialog.showModal();
     }
-  
-    if (!showNote && dialog?.open) {
-      dialog.close();
-      viewButtonRef.current?.focus();
-    }
   }, [showNote]);
+
+  const closeNoteModal = () => {
+    const dialog = noteViewModalRef.current;
+  
+    if (dialog?.open) {
+      dialog.close();
+    }
+  
+    setShowNote(false);
+    viewButtonRef.current?.focus();
+  };
 
   return (
     <>
@@ -224,7 +230,7 @@ function NoteCard({ note, onDelete }) {
             aria-labelledby="note-view-title"
             onCancel={(event) => {
               event.preventDefault();
-              setShowNote(false);
+              closeNoteModal();
             }}
           >
             <div className="note-view-header">
@@ -233,7 +239,7 @@ function NoteCard({ note, onDelete }) {
               <button
                 type="button"
                 className="close-note-btn"
-                onClick={() => setShowNote(false)}
+                onClick={closeNoteModal}
                 aria-label="Close note"
               >
                 ×
