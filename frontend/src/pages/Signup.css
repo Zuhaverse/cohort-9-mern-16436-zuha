@@ -125,7 +125,7 @@
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 .signup-card .button:hover {
-  background-color: #7bdd20;
+  opacity: 0.9;
   transform: translateY(-1px);
 }
 .signup-card p {
