@@ -3,6 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import "./NoteCard.css";
 
+function getPlainTextPreview(content, maxLength = 120) {
+  const tempElement = document.createElement("div");
+  tempElement.innerHTML = content;
+
+  const plainText = tempElement.textContent || tempElement.innerText || "";
+
+  return plainText.length > maxLength
+    ? `${plainText.substring(0, maxLength)}...`
+    : plainText;
+}
+
 function NoteCard({ note, onDelete }) {
   const deleteButtonRef = useRef(null);
   const modalRef = useRef(null);
@@ -56,9 +67,10 @@ function NoteCard({ note, onDelete }) {
   
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
+        if (deleting) return;
+      
         setShowConfirm(false);
         deleteButtonRef.current?.focus();
-        return;
       }
     
       if (event.key === "Tab") {
@@ -103,7 +115,7 @@ function NoteCard({ note, onDelete }) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [showConfirm]);
+  }, [showConfirm], deleting);
 
   return (
     <>
@@ -133,11 +145,7 @@ function NoteCard({ note, onDelete }) {
           </div>
         </div>
 
-        <p>
-          {note.content.length > 120
-            ? `${note.content.substring(0, 120)}...`
-            : note.content}
-        </p>
+        <p>{getPlainTextPreview(note.content)}</p>
 
         <small>{formattedDate}</small>
       </div>

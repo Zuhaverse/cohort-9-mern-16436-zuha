@@ -27,17 +27,25 @@ export const createNote = async (noteData) => {
 };
 
 export const updateNote = async (id, noteData) => {
-  const response = await axios.put(`${API_URL}/${id}`, noteData, {
-    withCredentials: true,
-  });
+  try {
+    const response = await axios.put(`${API_URL}/${id}`, noteData, {
+      withCredentials: true,
+    });
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to update note", { cause: error });
+  }
 };
 
 export const deleteNote = async (id) => {
-  const response = await axios.delete(`${API_URL}/${id}`, {
-    withCredentials: true,
-  });
+  try {
+    const response = await axios.delete(`${API_URL}/${id}`, {
+      withCredentials: true,
+    });
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to delete note", { cause: error });
+  }
 };

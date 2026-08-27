@@ -1,6 +1,11 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+/**
+ * Restricts access to authenticated users.
+ * @param {{ children: import("react").ReactNode }} props
+ */
+
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
 

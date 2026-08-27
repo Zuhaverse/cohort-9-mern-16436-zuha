@@ -8,6 +8,13 @@ import { AuthProvider } from "../context/AuthContext";
 jest.mock("../services/authService");
 
 test("renders the login page", () => {
+  verifySession.mockResolvedValue({
+    success: true,
+    authenticated: true,
+    data: {
+      user: null,
+    },
+  });
   render(
     <MemoryRouter>
       <AuthProvider>
@@ -37,7 +44,13 @@ test("logs in successfully and redirects to dashboard", async () => {
   loginUser.mockResolvedValue({
     success: true,
     message: "Login successful",
-    data: {},
+    data: {
+      user: {
+        id: 1,
+        name: "Test User",
+        email: "test@example.com",
+      },
+    },
   });
 
   verifySession.mockResolvedValue({
