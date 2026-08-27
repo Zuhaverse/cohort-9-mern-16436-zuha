@@ -58,7 +58,14 @@ function Dashboard() {
     const fetchNotes = async () => {
       try {
         const response = await getNotes();
-        setNotes(response.data);
+        const validNotes = response.data.filter(
+          (note) =>
+            note &&
+            typeof note.title === "string" &&
+            typeof note.content === "string"
+        );
+
+        setNotes(validNotes);
       } catch{
         setError("Failed to load notes. Please try again.");
       } finally {

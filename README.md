@@ -291,7 +291,7 @@ Configuration: `eslint.config.js`. The `dist` and `coverage` directories are ign
 
 ## SonarQube Setup and Analysis
 
-> **Note:** There is no `sonar-project.properties` file in this repository. A local scan has previously been recorded under `.scannerwork/` against the configuration below.
+> > **Note:** This repository includes `sonar-project.properties`. Use the checked-in file for the SonarQube scan configuration.
 
 - **Host:** `http://localhost:9000`
 - **Project key:** `cohort-9-mern-16436-zuha`
@@ -343,4 +343,4 @@ sonar-scanner \
 - No backend lint script or ESLint configuration.
 - No SQL migration/schema file — database tables must be created manually.
 - The auth service's API base URL is hardcoded rather than driven by `VITE_API_URL`.
-- `userModel.deleteUserByEmail` is referenced in a test file but not currently exported from `userModel.js`.
+

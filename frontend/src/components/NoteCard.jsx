@@ -18,6 +18,8 @@ function getPlainTextPreview(content, maxLength = 120) {
 function NoteCard({ note, onDelete }) {
   const deleteButtonRef = useRef(null);
   const modalRef = useRef(null);
+  const noteViewModalRef = useRef(null);
+  const viewButtonRef = useRef(null);
   const navigate = useNavigate();
   const cancelButtonRef = useRef(null);
 
@@ -117,6 +119,19 @@ function NoteCard({ note, onDelete }) {
     };
   }, [showConfirm, deleting]);
 
+  useEffect(() => {
+    const dialog = noteViewModalRef.current;
+  
+    if (showNote && dialog && !dialog.open) {
+      dialog.showModal();
+    }
+  
+    if (!showNote && dialog?.open) {
+      dialog.close();
+      viewButtonRef.current?.focus();
+    }
+  }, [showNote]);
+
   return (
     <>
       <div className="note-card">
@@ -125,6 +140,7 @@ function NoteCard({ note, onDelete }) {
 
           <div className="note-card-actions">
             <button
+              ref={viewButtonRef}
               type="button"
               className="view-note-btn"
               onClick={() => setShowNote(true)}
@@ -203,9 +219,13 @@ function NoteCard({ note, onDelete }) {
       {showNote && (
         <div className="note-view-overlay">
           <dialog
+            ref={noteViewModalRef}
             className="note-view-modal"
             aria-labelledby="note-view-title"
-            open
+            onCancel={(event) => {
+              event.preventDefault();
+              setShowNote(false);
+            }}
           >
             <div className="note-view-header">
               <h2 id="note-view-title">{note.title}</h2>
