@@ -137,6 +137,25 @@ function NoteCard({ note, onDelete }) {
     setShowNote(false);
     viewButtonRef.current?.focus();
   };
+  
+  useEffect(() => {
+    if (!showNote) {
+      return;
+    }
+  
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        closeNoteModal();
+      }
+    };
+  
+    document.addEventListener("keydown", handleKeyDown);
+  
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [showNote]);
+
 
   return (
     <>
@@ -222,17 +241,13 @@ function NoteCard({ note, onDelete }) {
         </div>
       )}
 
-      {showNote && (
-        <div className="note-view-overlay">
-          <dialog
-            ref={noteViewModalRef}
-            className="note-view-modal"
-            aria-labelledby="note-view-title"
-            onCancel={(event) => {
-              event.preventDefault();
-              closeNoteModal();
-            }}
-          >
+{showNote && (
+  <div className="note-view-overlay">
+    <dialog
+      ref={noteViewModalRef}
+      className="note-view-modal"
+      aria-labelledby="note-view-title"
+    >
             <div className="note-view-header">
               <h2 id="note-view-title">{note.title}</h2>
 

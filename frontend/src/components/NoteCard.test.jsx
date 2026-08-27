@@ -3,6 +3,16 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import NoteCard from "./NoteCard";
 
+beforeAll(() => {
+  HTMLDialogElement.prototype.showModal = jest.fn(function () {
+    this.open = true;
+  });
+
+  HTMLDialogElement.prototype.close = jest.fn(function () {
+    this.open = false;
+  });
+});
+
 describe("NoteCard delete flow", () => {
   const note = {
     id: 1,
@@ -25,14 +35,7 @@ describe("NoteCard delete flow", () => {
       name: "Delete Test Note",
     });
 
-    try {
-      await user.click(deleteButton);
-    } catch (error) {
-      throw new Error(
-        `Failed to open delete confirmation dialog: ${error.message}`,
-        { cause: error }
-      );
-    }
+    await user.click(deleteButton);
 
     expect(
       screen.getByRole("heading", { name: "Delete Note?" })
@@ -46,14 +49,7 @@ describe("NoteCard delete flow", () => {
       name: "Delete",
     });
 
-    try {
-      await user.click(confirmButton);
-    } catch (error) {
-      throw new Error(
-        `Failed to confirm note deletion: ${error.message}`,
-        { cause: error }
-      );
-    }
+    await user.click(confirmButton);
 
     expect(onDelete).toHaveBeenCalledWith(1);
     expect(onDelete).toHaveBeenCalledTimes(1);
@@ -73,14 +69,7 @@ describe("NoteCard delete flow", () => {
       name: "Delete Test Note",
     });
 
-    try {
-      await user.click(deleteButton);
-    } catch (error) {
-      throw new Error(
-        `Failed to open delete confirmation dialog for focus test: ${error.message}`,
-        { cause: error }
-      );
-    }
+    await user.click(deleteButton);
 
     const cancelButton = screen.getByRole("button", {
       name: "Cancel",
@@ -92,15 +81,123 @@ describe("NoteCard delete flow", () => {
 
     expect(cancelButton).toHaveFocus();
 
-    try {
-      await user.keyboard("{Shift>}{Tab}{/Shift}");
-    } catch (error) {
-      throw new Error(
-        `Failed to test Shift+Tab focus behavior: ${error.message}`,
-        { cause: error }
-      );
-    }
+    await user.keyboard("{Shift>}{Tab}{/Shift}");
 
     expect(confirmDeleteButton).toHaveFocus();
+  });
+
+  test("closes delete dialog with Cancel and restores focus", async () => {
+    const user = userEvent.setup();
+    const onDelete = jest.fn().mockResolvedValue();
+
+    render(
+      <MemoryRouter>
+        <NoteCard note={note} onDelete={onDelete} />
+      </MemoryRouter>
+    );
+
+    const deleteButton = screen.getByRole("button", {
+      name: "Delete Test Note",
+    });
+
+    await user.click(deleteButton);
+
+    const cancelButton = screen.getByRole("button", {
+      name: "Cancel",
+    });
+
+    await user.click(cancelButton);
+
+    expect(
+      screen.queryByRole("heading", { name: "Delete Note?" })
+    ).not.toBeInTheDocument();
+
+    expect(deleteButton).toHaveFocus();
+  });
+
+  test("opens the note view dialog", async () => {
+    const user = userEvent.setup();
+    const onDelete = jest.fn();
+
+    render(
+      <MemoryRouter>
+        <NoteCard note={note} onDelete={onDelete} />
+      </MemoryRouter>
+    );
+
+    const viewButton = screen.getByRole("button", {
+      name: "View Test Note",
+    });
+
+    await user.click(viewButton);
+
+    expect(
+      screen.getByRole("heading", { name: "Test Note", level: 2 })
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("This is a test note.", { selector: ".note-view-content" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Close note" })
+    ).toBeInTheDocument();
+  });
+
+  test("closes note view with the close button and restores focus", async () => {
+    const user = userEvent.setup();
+    const onDelete = jest.fn();
+
+    render(
+      <MemoryRouter>
+        <NoteCard note={note} onDelete={onDelete} />
+      </MemoryRouter>
+    );
+
+    const viewButton = screen.getByRole("button", {
+      name: "View Test Note",
+    });
+
+    await user.click(viewButton);
+
+    const closeButton = screen.getByRole("button", {
+      name: "Close note",
+    });
+
+    await user.click(closeButton);
+
+    expect(
+      screen.queryByRole("button", { name: "Close note" })
+    ).not.toBeInTheDocument();
+
+    expect(viewButton).toHaveFocus();
+  });
+
+  test("closes note view with Escape and restores focus", async () => {
+    const user = userEvent.setup();
+    const onDelete = jest.fn();
+
+    render(
+      <MemoryRouter>
+        <NoteCard note={note} onDelete={onDelete} />
+      </MemoryRouter>
+    );
+
+    const viewButton = screen.getByRole("button", {
+      name: "View Test Note",
+    });
+
+    await user.click(viewButton);
+
+    expect(
+      screen.getByRole("heading", { name: "Test Note", level: 2 })
+    ).toBeInTheDocument();
+
+    await user.keyboard("{Escape}");
+
+    expect(
+      screen.queryByRole("button", { name: "Close note" })
+    ).not.toBeInTheDocument();
+
+    expect(viewButton).toHaveFocus();
   });
 });

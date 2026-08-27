@@ -75,8 +75,6 @@ async function deleteUserByEmail(email) {
     );
 
     return result;
-  } catch (error) {
-    throw error;
   } finally {
     if (connection) {
       connection.release();
