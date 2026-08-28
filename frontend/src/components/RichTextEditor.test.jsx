@@ -3,30 +3,30 @@ import userEvent from "@testing-library/user-event";
 import RichTextEditor from "./RichTextEditor";
 
 jest.mock("react-quill-new", () => {
-    const React = require("react");
-  
-    return React.forwardRef(function MockReactQuill(
-      { value, onChange, placeholder },
-      ref
-    ) {
-      const editorRoot = React.useRef(null);
-  
-      React.useImperativeHandle(ref, () => ({
-        getEditor: () => ({
-          root: editorRoot.current,
-        }),
-      }));
-  
-      return (
-        <textarea
-          ref={editorRoot}
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          placeholder={placeholder}
-        />
-      );
-    });
+  const React = jest.requireActual("react");
+
+  return React.forwardRef(function MockReactQuill(
+    { value, onChange, placeholder },
+    ref
+  ) {
+    const editorRoot = React.useRef(null);
+
+    React.useImperativeHandle(ref, () => ({
+      getEditor: () => ({
+        root: editorRoot.current,
+      }),
+    }));
+
+    return (
+      <textarea
+        ref={editorRoot}
+        value={value || ""}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+      />
+    );
   });
+});
 
 test("renders the rich text editor and accepts input", async () => {
   const user = userEvent.setup();

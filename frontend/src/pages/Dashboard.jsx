@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getNotes, deleteNote } from "../services/noteService";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 import NoteList from "../components/NoteList";
 import logo from "../assets/logo.png";
 

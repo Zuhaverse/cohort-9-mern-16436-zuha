@@ -20,7 +20,7 @@ function CreateNote() {
       await createNote(noteData);
 
       navigate("/dashboard");
-    } catch (error) {
+    } catch {
       setError("Failed to create note. Please try again.");
     } finally {
       setLoading(false);

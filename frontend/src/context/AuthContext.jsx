@@ -1,18 +1,16 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   verifySession,
   loginUser,
   registerUser,
   logoutUser,
 } from "../services/authService";
+import { AuthContext } from "./AuthContextValue";
 
 /**
  * Provides authentication state and actions to the application.
  * @param {{ children: import("react").ReactNode }} props
  */
-
-const AuthContext = createContext(null);
-
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,17 +18,17 @@ export function AuthProvider({ children }) {
 
   const checkSession = async () => {
     const operationId = ++authOperationRef.current;
-  
+
     try {
       const response = await verifySession();
-  
+
       if (operationId !== authOperationRef.current) return;
-  
+
       setUser(response.data.user);
       return true;
-    } catch (error) {
+    } catch {
       if (operationId !== authOperationRef.current) return;
-  
+
       setUser(null);
       return false;
     } finally {
@@ -41,26 +39,29 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
+    // Session verification intentionally runs once when AuthProvider mounts.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     checkSession();
   }, []);
 
   const login = async ({ email, password }) => {
     const operationId = ++authOperationRef.current;
+
     setLoading(true);
-  
+
     try {
       await loginUser({ email, password });
-  
+
       if (operationId !== authOperationRef.current) return;
-  
+
       const response = await verifySession();
-  
+
       if (operationId !== authOperationRef.current) return;
-  
+
       setUser(response.data.user);
     } catch (error) {
       if (operationId !== authOperationRef.current) return;
-  
+
       setUser(null);
       throw error;
     } finally {
@@ -75,12 +76,24 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    ++authOperationRef.current;
+    const operationId = ++authOperationRef.current;
+    setLoading(true);
   
-    await logoutUser();
-  setUser(null);
-};
-
+    try {
+      await logoutUser();
+  
+      if (operationId === authOperationRef.current) {
+        setUser(null);
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      throw error;
+    } finally {
+      if (operationId === authOperationRef.current) {
+        setLoading(false);
+      }
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -95,8 +108,4 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

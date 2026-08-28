@@ -14,77 +14,93 @@ describe("NoteCard delete flow", () => {
   test("confirms and deletes a note", async () => {
     const user = userEvent.setup();
     const onDelete = jest.fn().mockResolvedValue();
-  
+
     render(
       <MemoryRouter>
         <NoteCard note={note} onDelete={onDelete} />
       </MemoryRouter>
     );
-  
+
+    const deleteButton = screen.getByRole("button", {
+      name: "Delete Test Note",
+    });
+
     try {
-      const deleteButton = screen.getByRole("button", {
-        name: "Delete Test Note",
-      });
-  
       await user.click(deleteButton);
-  
-      expect(
-        screen.getByRole("heading", { name: "Delete Note?" })
-      ).toBeInTheDocument();
-  
-      expect(
-        screen.getByText(/Are you sure you want to delete/i)
-      ).toBeInTheDocument();
-  
-      const confirmButton = screen.getByRole("button", {
-        name: "Delete",
-      });
-  
-      await user.click(confirmButton);
-  
-      expect(onDelete).toHaveBeenCalledWith(1);
-      expect(onDelete).toHaveBeenCalledTimes(1);
     } catch (error) {
       throw new Error(
-        `Note deletion flow test failed: ${error.message}`,
+        `Failed to open delete confirmation dialog: ${error.message}`,
         { cause: error }
       );
     }
+
+    expect(
+      screen.getByRole("heading", { name: "Delete Note?" })
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/Are you sure you want to delete/i)
+    ).toBeInTheDocument();
+
+    const confirmButton = screen.getByRole("button", {
+      name: "Delete",
+    });
+
+    try {
+      await user.click(confirmButton);
+    } catch (error) {
+      throw new Error(
+        `Failed to confirm note deletion: ${error.message}`,
+        { cause: error }
+      );
+    }
+
+    expect(onDelete).toHaveBeenCalledWith(1);
+    expect(onDelete).toHaveBeenCalledTimes(1);
   });
 
-  test("keeps focus inside the confirmation dialog when Shift+Tab is pressed from the dialog root", async () => {
+  test("moves focus to Delete when Shift+Tab is pressed from Cancel", async () => {
     const user = userEvent.setup();
     const onDelete = jest.fn().mockResolvedValue();
-  
+
     render(
       <MemoryRouter>
         <NoteCard note={note} onDelete={onDelete} />
       </MemoryRouter>
     );
-  
+
+    const deleteButton = screen.getByRole("button", {
+      name: "Delete Test Note",
+    });
+
     try {
-      const deleteButton = screen.getByRole("button", {
-        name: "Delete Test Note",
-      });
-  
       await user.click(deleteButton);
-  
-      const dialog = screen.getByRole("dialog");
-  
-      const confirmDeleteButton = screen.getByRole("button", {
-        name: "Delete",
-      });
-  
-      expect(dialog).toHaveFocus();
-  
-      await user.keyboard("{Shift>}{Tab}{/Shift}");
-  
-      expect(confirmDeleteButton).toHaveFocus();
     } catch (error) {
       throw new Error(
-        `Note focus trap test failed: ${error.message}`,
+        `Failed to open delete confirmation dialog for focus test: ${error.message}`,
         { cause: error }
       );
     }
+
+    const cancelButton = screen.getByRole("button", {
+      name: "Cancel",
+    });
+
+    const confirmDeleteButton = screen.getByRole("button", {
+      name: "Delete",
+    });
+
+    expect(cancelButton).toHaveFocus();
+
+    try {
+      await user.keyboard("{Shift>}{Tab}{/Shift}");
+    } catch (error) {
+      throw new Error(
+        `Failed to test Shift+Tab focus behavior: ${error.message}`,
+        { cause: error }
+      );
+    }
+
+    expect(confirmDeleteButton).toHaveFocus();
   });
 });

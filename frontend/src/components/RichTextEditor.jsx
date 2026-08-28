@@ -34,6 +34,8 @@ function RichTextEditor({
   ariaLabelledby,
   ariaInvalid,
   ariaDescribedby,
+  rows,
+  className,
 }) {
   const quillRef = useRef(null);
 
@@ -42,8 +44,13 @@ function RichTextEditor({
 
     if (!editor) return;
 
-    if (id) editor.id = id;
-    if (ariaLabelledby) editor.setAttribute("aria-labelledby", ariaLabelledby);
+    if (id) {
+      editor.id = id;
+    }
+
+    if (ariaLabelledby) {
+      editor.setAttribute("aria-labelledby", ariaLabelledby);
+    }
 
     if (ariaInvalid !== undefined) {
       editor.setAttribute("aria-invalid", String(ariaInvalid));
@@ -54,10 +61,14 @@ function RichTextEditor({
     } else {
       editor.removeAttribute("aria-describedby");
     }
-  }, [id, ariaLabelledby, ariaInvalid, ariaDescribedby]);
+
+    if (rows) {
+      editor.style.minHeight = `${rows * 20}px`;
+    }
+  }, [id, ariaLabelledby, ariaInvalid, ariaDescribedby, rows]);
 
   return (
-    <div className="rich-text-editor">
+    <div className={`rich-text-editor ${className || ""}`}>
       <ReactQuill
         ref={quillRef}
         theme="snow"

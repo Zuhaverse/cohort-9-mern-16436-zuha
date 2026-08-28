@@ -75,16 +75,22 @@ function NoteForm({
       )}
     </div>
       <div className="form-group">
-      <label id="content-label">Content</label>
+      <label id="content-label" htmlFor="content">
+  Content
+</label>
 
-        <RichTextEditor
+      <RichTextEditor
   value={content}
   onChange={setContent}
   placeholder="Write your note..."
+  rows={10}
   id="content"
-  aria-labelledby="content-label"
-  aria-invalid={!!errors.content}
-  aria-describedby={errors.content ? "content-error" : undefined}
+  ariaLabelledby="content-label"
+  ariaInvalid={!!errors.content}
+  ariaDescribedby={
+    errors.content ? "content-error" : undefined
+  }
+  className={errors.content ? "input-error" : ""}
 />
 
 {errors.content && (
