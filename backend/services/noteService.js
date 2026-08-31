@@ -5,14 +5,14 @@ const logger = require("../logger/logger");
 async function createNote(noteData) {
     const {title,content,userId} = noteData;
     try{
-        logger.info({title,content,userId},"Creating note");
+        logger.info({ userId }, "Creating note");
         const result = await noteModel.createNote(title,content,userId);
         logger.info({ userId }, "Note created successfully");
         return {
             message: "Note created successfully!"
         };
     } catch (error) {
-        logger.error(error,"Error creating note");
+        logger.error({ err: error, userId }, "Failed to create note");
         throw error;
     }
     }
@@ -24,7 +24,7 @@ async function createNote(noteData) {
             logger.info({userId},"Notes fetched successfully");
             return result;
         } catch (error) {
-            logger.error(error,"Error getting notes by user");
+            logger.error({ err: error, userId }, "Failed to fetch notes");
             throw error;
         }
     }
@@ -53,7 +53,7 @@ async function createNote(noteData) {
     async function updateNote(noteData) {
         const {title,content,userId,noteId} = noteData;
         try{
-            logger.info({title,content,userId,noteId},"Updating note");
+            logger.info({ userId, noteId }, "Updating note");
             const result = await noteModel.updateNote(title,content,userId,noteId);
 
             if (result.affectedRows === 0) {
@@ -68,7 +68,10 @@ async function createNote(noteData) {
             };
         }
         catch (error) {
-            logger.error(error,"Error updating note");
+            logger.error(
+                { err: error, userId, noteId },
+                "Failed to update note"
+              );
             throw error;
         }
     }
@@ -90,7 +93,10 @@ async function createNote(noteData) {
             };
         }
         catch (error) {
-            logger.error(error,"Error deleting note");
+            logger.error(
+                { err: error, userId, noteId },
+                "Failed to delete note"
+              );
             throw error;
         }
     }
