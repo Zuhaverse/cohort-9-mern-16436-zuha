@@ -1,4 +1,14 @@
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const sanitizeHtml = require("sanitize-html");
+
+const emailRegex = /^[^\s@]{1,64}@[^\s@]{1,255}\.[^\s@]{1,24}$/;
+
+const quillAllowlist = {
+    allowedTags: ["p", "br", "strong", "em", "u", "s", "ol", "ul", "li", "a", "blockquote"],
+    allowedAttributes: {
+        a: ["href", "target", "rel"],
+    },
+    allowedSchemes: ["http", "https", "mailto"],
+};
 
 function validationError(message, next) {
     const error = new Error(message);
@@ -66,14 +76,21 @@ function validateNoteBody(req, res, next) {
     }
 
     const trimmedTitle = title.trim();
-    const trimmedContent = content.trim();
-
-    if (!trimmedTitle || !trimmedContent) {
-        return validationError("Title and content cannot be empty or whitespace", next);
-    }
+    const sanitizedContent = sanitizeHtml(content, quillAllowlist).trim();
+    const plainTextContent = sanitizeHtml(sanitizedContent, {
+        allowedTags: [],
+        allowedAttributes: {},
+      }).trim();
+      
+    if (!trimmedTitle || !plainTextContent) {
+        return validationError(
+          "Title and content cannot be empty or whitespace",
+          next
+        );
+      }
 
     req.body.title = trimmedTitle;
-    req.body.content = trimmedContent;
+    req.body.content = sanitizedContent;
 
     next();
 }

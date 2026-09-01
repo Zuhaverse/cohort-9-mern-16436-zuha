@@ -29,6 +29,7 @@ function CreateNote() {
 
   return (
     <div className="note-page">
+      <div className="container">
       <div className="header">
         
           <button
@@ -55,6 +56,7 @@ function CreateNote() {
         submitText="Create Note"
         loading={loading}
       />
+    </div>
     </div>
   );
 }

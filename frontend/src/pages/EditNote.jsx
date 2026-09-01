@@ -75,6 +75,7 @@ function EditNote() {
   
   return (
     <div className="note-page">
+      <div className="container">
       <div className="header">
         <button
           type="button"
@@ -108,6 +109,7 @@ function EditNote() {
           />
         </>
       )}
+    </div>
     </div>
   );
 }

@@ -11,7 +11,9 @@ function NoteForm({
   const [title, setTitle] = useState(initialData.title || "");
   const [content, setContent] = useState(initialData.content || "");
   const [errors, setErrors] = useState({});
-  const plainTextContent = content.replace(/<[^>]*>/g, "").trim();
+  const plainTextContent =
+    new DOMParser().parseFromString(content, "text/html").body.textContent?.trim() ||
+    "";
 
   const handleSubmit = async (event) => {
     event.preventDefault();

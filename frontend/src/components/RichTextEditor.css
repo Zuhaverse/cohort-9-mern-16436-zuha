@@ -1,90 +1,97 @@
+.rich-text-editor {
+  border-radius: 10px;
+  font-family: Inter, sans-serif;
+}
+
 .rich-text-editor .ql-toolbar {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 5px 8px;
-    background: #fff;
-    border: 1px solid #e2e2e2;
-    border-radius: 10px 10px 0 0;
-    white-space: nowrap;
-    overflow: visible; 
-    position: relative;
-    z-index: 2; 
-  }
-  
-  .rich-text-editor .ql-toolbar .ql-formats {
-    display: inline-block !important;
-    margin: 0 4px 0 0 !important;
-    padding: 0 !important;
-    border: none !important;
-  }
-  
-  .rich-text-editor .ql-toolbar button {
-    float: none !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 30px !important;
-    height: 30px !important;
-    min-width: 30px !important;
-    max-width: 30px !important;
-    padding: 5px !important;
-    margin: 0 1px !important;
-    box-sizing: border-box !important;
-    border: none !important;
-    border-radius: 6px !important;
-    background: transparent;
-  }
-  
-  .rich-text-editor .ql-toolbar button:hover {
-    background-color: #f3f3f3 !important;
-  }
-  
-  .rich-text-editor .ql-toolbar button.ql-active {
-    background-color: #eef2ff !important;
-  }
-  
-  .rich-text-editor .ql-toolbar .ql-picker {
-    display: inline-block !important;
-    float: none !important;
-    height: 30px !important;
-    width: auto !important;
-    margin: 0 2px !important;
-    position: relative !important;
-  }
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px 8px;
+  background: #FEFEF2;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px 10px 0 0;
+  white-space: nowrap;
+  overflow: visible;
+  position: relative;
+  z-index: 2;
+}
 
-  .rich-text-editor .ql-toolbar .ql-picker-options {
-    z-index: 1000 !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    border: 1px solid #e2e2e2 !important;
-    border-radius: 8px;
-  }
-  
-  .rich-text-editor .ql-toolbar .ql-picker-label {
-    height: 30px !important;
-    padding: 5px 6px !important;
-    box-sizing: border-box;
-    border-radius: 6px;
-  }
-  
-  .rich-text-editor .ql-toolbar .ql-header {
-    width: 75px !important;
-  }
-  
-  .rich-text-editor .ql-toolbar .ql-color {
-    width: 30px !important;
-  }
+.rich-text-editor .ql-toolbar .ql-formats {
+  display: inline-block !important;
+  margin: 0 4px 0 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
 
-  .rich-text-editor .ql-container {
-    min-height: 220px;
-    border: 1px solid #e2e2e2;
-    border-top: none;
-    border-radius: 0 0 10px 10px;
-    font-family: Inter, sans-serif;
-    font-size: 14px;
-  }
-  
-  .rich-text-editor .ql-editor {
-    min-height: 220px;
-    padding: 14px;
-    line-height: 1.6;
-  }
+.rich-text-editor .ql-toolbar button {
+  float: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+  padding: 5px !important;
+  margin: 0 1px !important;
+  box-sizing: border-box !important;
+  border: none !important;
+  border-radius: 6px !important;
+  background-color: transparent;
+}
+
+.rich-text-editor .ql-toolbar button:hover {
+  background-color: #f2fcdb !important;
+}
+
+.rich-text-editor .ql-toolbar button.ql-active {
+  background-color: #e7f4c8 !important;
+}
+
+.rich-text-editor .ql-toolbar .ql-picker {
+  display: inline-block !important;
+  float: none !important;
+  height: 30px !important;
+  width: auto !important;
+  margin: 0 2px !important;
+  position: relative !important;
+}
+
+.rich-text-editor .ql-toolbar .ql-picker-label {
+  height: 30px !important;
+  padding: 5px 6px !important;
+  box-sizing: border-box;
+  border-radius: 6px;
+}
+
+.rich-text-editor .ql-toolbar .ql-picker-options {
+  background-color: #FEFEF2;
+  z-index: 1000 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e2e2e2 !important;
+  border-radius: 8px;
+}
+
+.rich-text-editor .ql-toolbar .ql-header {
+  width: 75px !important;
+}
+
+.rich-text-editor .ql-toolbar .ql-color {
+  width: 30px !important;
+}
+
+.rich-text-editor .ql-container {
+  border: 1px solid #e2e2e8;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+}
+
+.rich-text-editor .ql-editor {
+  min-height: 220px;
+  padding: 14px;
+  line-height: 1.6;
+  background-color: #FEFEF2;
+  border-radius: 0 0 10px 10px;
+}
